@@ -81,7 +81,7 @@
     }];
 }
 
-- (void)selOutputPanelEnd:(NSSavePanel*)panel returnCode:(long)returnCode{
+- (void)selOutputPanelEnd:(NSSavePanel*)panel returnCode:(NSInteger)returnCode{
 	if(returnCode == NSOKButton){
 		NSString* selfile = [[panel URL] path];
         bool bps_delta = false;
@@ -191,22 +191,22 @@
 		}
 	}
 	else if(currentFormat == IPSPAT){
-		retval = [IPSAdapter CreatePatch:origFile withMod:modFile andCreate:createFile];
+		retval = [IPSAdapter createPatch:origFile withMod:modFile andCreate:createFile];
 	}
 	else if(currentFormat == XDELTAPAT){
-        retval = [XDeltaAdapter CreatePatch:origFile withMod:modFile andCreate:createFile];
+        retval = [XDeltaAdapter createPatch:origFile withMod:modFile andCreate:createFile];
 	}
 	else if(currentFormat == PPFPAT){
-		retval = [PPFAdapter CreatePatch:origFile withMod:modFile andCreate:createFile];
+		retval = [PPFAdapter createPatch:origFile withMod:modFile andCreate:createFile];
 	}
     else if(currentFormat == BSDIFFPAT){
-        retval = [BSdiffAdapter CreatePatch:origFile withMod:modFile andCreate:createFile];
+        retval = [BSdiffAdapter createPatch:origFile withMod:modFile andCreate:createFile];
     }
     else if(currentFormat == BPSPAT){
-        retval = [BPSAdapter CreatePatchLinear:origFile withMod:modFile andCreate:createFile];
+        retval = [BPSAdapter createPatchLinear:origFile withMod:modFile andCreate:createFile];
     }
     else if(currentFormat == BPSDELTA){
-        retval = [BPSAdapter CreatePatchDelta:origFile withMod:modFile andCreate:createFile];
+        retval = [BPSAdapter createPatchDelta:origFile withMod:modFile andCreate:createFile];
     }
 	return retval;
 }

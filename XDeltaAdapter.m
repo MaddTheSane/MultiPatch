@@ -7,7 +7,7 @@
 #include "xdelta3.h"
 
 @implementation XDeltaAdapter
-+(NSString*)ApplyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{
++(NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{
 	FILE*  InFile = fopen([patch cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
 	FILE*  SrcFile = fopen([input cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
 	FILE* OutFile = fopen([output cStringUsingEncoding:[NSString defaultCStringEncoding]], "wb");
@@ -27,7 +27,7 @@
 	return nil;
 }
 
-+(NSString*)CreatePatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
++(NSString*)createPatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
     FILE* oldFile = fopen([orig cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
 	FILE* newFile = fopen([modify cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
 	FILE* deltaFile = fopen([output cStringUsingEncoding:[NSString defaultCStringEncoding]], "wb");

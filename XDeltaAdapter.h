@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 
 @interface XDeltaAdapter : NSObject {}
-+(NSString*)ApplyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output;
++(NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output;
 int code (int encode, FILE* InFile, FILE* SrcFile, FILE* OutFile, int BufSize);
-+(NSString*)CreatePatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output;
++(NSString*)createPatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output;
 @end

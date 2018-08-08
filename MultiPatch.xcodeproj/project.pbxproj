@@ -13,7 +13,6 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		9E0351C30E9D8B570043AC3E /* MPPatchWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9E0351C10E9D8B570043AC3E /* MPPatchWindow.mm */; };
 		9E17AB9F120F9E9800BA4827 /* MPCreationWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9E17AB9E120F9E9800BA4827 /* MPCreationWindow.mm */; };
-		9E1EE3BF11FE75E90081FDC2 /* uips.c in Sources */ = {isa = PBXBuildFile; fileRef = 9E1EE3BE11FE75E90081FDC2 /* uips.c */; };
 		9E2701CC1C31C59000F50B1F /* mbFlipWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2701CB1C31C59000F50B1F /* mbFlipWindow.m */; };
 		9E2701CE1C31C64200F50B1F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E2701CD1C31C64200F50B1F /* QuartzCore.framework */; };
 		9E28E08611E2BE330002DE08 /* libppf.cc in Sources */ = {isa = PBXBuildFile; fileRef = 9E28E08011E2BE330002DE08 /* libppf.cc */; };
@@ -423,7 +422,6 @@
 				9E28E08611E2BE330002DE08 /* libppf.cc in Sources */,
 				9E28E08811E2BE330002DE08 /* ppf.cc in Sources */,
 				9E28E08D11E2BF5E0002DE08 /* PPFAdapter.mm in Sources */,
-				9E1EE3BF11FE75E90081FDC2 /* uips.c in Sources */,
 				9E17AB9F120F9E9800BA4827 /* MPCreationWindow.mm in Sources */,
 				9ED6066E126D30DC004782CA /* bsdiff.c in Sources */,
 				9E2701CC1C31C59000F50B1F /* mbFlipWindow.m in Sources */,

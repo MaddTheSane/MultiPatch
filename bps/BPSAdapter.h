@@ -6,7 +6,7 @@
 #import <Foundation/Foundation.h>
 
 @interface BPSAdapter : NSObject
-+ (NSString*)ApplyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output;
-+ (NSString*)CreatePatchLinear:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output;
-+ (NSString*)CreatePatchDelta:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output;
++ (NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output;
++ (NSString*)createPatchLinear:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output;
++ (NSString*)createPatchDelta:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output;
 @end

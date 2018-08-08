@@ -41,11 +41,11 @@
 	}
 }
 
-+(NSString*)ApplyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{
++(NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{
 	lppf::LibPPF ppf;
 	int error;
 	
-	if ((error = ppf.loadPatch([patch cStringUsingEncoding:[NSString defaultCStringEncoding]])) != 0) {
+	if ((error = ppf.loadPatch([patch fileSystemRepresentation])) != 0) {
 		return [self errorMsg:error];
 	}
 	
@@ -59,13 +59,13 @@
 	}
 	
 	// Apply PPF data to file
-	if ((error = ppf.applyPatch([output cStringUsingEncoding:[NSString defaultCStringEncoding]], false)) != 0) {
+	if ((error = ppf.applyPatch([output fileSystemRepresentation], false)) != 0) {
 		return [self errorMsg:error];
 	}
 	return nil; //Success!
 }
 
-+(NSString*)CreatePatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
++(NSString*)createPatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
     return @"Oops, PPF creation not supported."; //Success! :-(
 }
 @end

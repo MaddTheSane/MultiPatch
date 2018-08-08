@@ -188,19 +188,19 @@ static mbFlipWindow* _flipper;
 		}
 	}
 	else if(currentFormat == IPSPAT){
-		retval = [IPSAdapter ApplyPatch:patchPath toFile:sourceFile andCreate:destFile];
+		retval = [IPSAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
 	}
 	else if(currentFormat == XDELTAPAT){
-		retval = [XDeltaAdapter ApplyPatch:patchPath toFile:sourceFile andCreate:destFile];
+		retval = [XDeltaAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
 	}
 	else if(currentFormat == PPFPAT){
-		retval = [PPFAdapter ApplyPatch:patchPath toFile:sourceFile andCreate:destFile];
+		retval = [PPFAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
 	}
     else if(currentFormat == BSDIFFPAT){
-        retval = [BSdiffAdapter ApplyPatch:patchPath toFile:sourceFile andCreate:destFile];
+        retval = [BSdiffAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
     }
     else if(currentFormat == BPSPAT){
-        retval = [BPSAdapter ApplyPatch:patchPath toFile:sourceFile andCreate:destFile];
+        retval = [BPSAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
     }
 	return retval;
 }

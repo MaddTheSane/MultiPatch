@@ -41,12 +41,12 @@
     return retval;
 }
 
-+(NSString*)ApplyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{
++(NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{
     NSString* retval = nil;
     nall::bpspatch bps;
-    bps.modify([patch cStringUsingEncoding:[NSString defaultCStringEncoding]]);
-    bps.source([input cStringUsingEncoding:[NSString defaultCStringEncoding]]);
-    bps.target([output cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+    bps.modify([patch fileSystemRepresentation]);
+    bps.source([input fileSystemRepresentation]);
+    bps.target([output fileSystemRepresentation]);
     nall::bpspatch::result bpsResult = bps.apply();
     if(bpsResult != nall::bpspatch::result::success){
         retval = [BPSAdapter TranslateBPSresult:bpsResult];
@@ -54,23 +54,23 @@
     return retval;
 }
 
-+(NSString*)CreatePatchLinear:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
++(NSString*)createPatchLinear:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
     NSString* retval = nil;
     nall::bpslinear bps;
-    bps.source([orig cStringUsingEncoding:[NSString defaultCStringEncoding]]);
-    bps.target([modify cStringUsingEncoding:[NSString defaultCStringEncoding]]);
-    if(bps.create([output cStringUsingEncoding:[NSString defaultCStringEncoding]])==false){
+    bps.source([orig fileSystemRepresentation]);
+    bps.target([modify fileSystemRepresentation]);
+    if(bps.create([output fileSystemRepresentation])==false){
         retval = @"BPS patch creation failed due to an unknown error!";
     }
     return nil;
 }
 
-+(NSString*)CreatePatchDelta:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
++(NSString*)createPatchDelta:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
     NSString* retval = nil;
     nall::bpsdelta bps;
-    bps.source([orig cStringUsingEncoding:[NSString defaultCStringEncoding]]);
-    bps.target([modify cStringUsingEncoding:[NSString defaultCStringEncoding]]);
-    if(bps.create([output cStringUsingEncoding:[NSString defaultCStringEncoding]])==false){
+    bps.source([orig fileSystemRepresentation]);
+    bps.target([modify fileSystemRepresentation]);
+    if(bps.create([output fileSystemRepresentation])==false){
         retval = @"BPS patch creation failed due to an unknown error!";
     }
     return nil;
