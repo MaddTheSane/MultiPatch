@@ -2,9 +2,16 @@
 #include "mbFlipWindow.h"
 #include "MPFileTextField.h"
 
-typedef enum PatchTypes{
-	UNKNOWNPAT, UPSPAT, XDELTAPAT, IPSPAT, PPFPAT, BSDIFFPAT, BPSPAT, BPSDELTA
-} PatchFormat;
+typedef NS_ENUM(NSInteger, MPPatchFormat) {
+	MPPatchFormatUnknown,
+	MPPatchFormatUPS,
+	MPPatchFormatXDelta,
+	MPPatchFormatIPS,
+	MPPatchFormatPPF,
+	MPPatchFormatBSDiff,
+	MPPatchFormatBPS,
+	MPPatchFormatBPSDelta
+};
 
 @interface MPPatchWindow : NSWindow{
     IBOutlet MPFileTextField *txtPatchPath;
@@ -16,7 +23,7 @@ typedef enum PatchTypes{
 	IBOutlet id	barProgress;
 	IBOutlet id btnApply;
 	IBOutlet NSTextField *lblStatus;
-	PatchFormat currentFormat;
+	MPPatchFormat currentFormat;
 	NSString* romFormat;
 }
 
@@ -24,7 +31,7 @@ typedef enum PatchTypes{
 - (IBAction)btnSelectPatch:(id)sender;
 - (IBAction)btnSelectOriginal:(id)sender;
 - (IBAction)btnSelectOutput:(id)sender;
-+ (PatchFormat)detectPatchFormat:(NSString*)patchPath;
++ (MPPatchFormat)detectPatchFormat:(NSString*)patchPath;
 - (NSString*)ApplyPatch:(NSString*)patchPath :(NSString*)sourceFile :(NSString*)destFile;
 - (IBAction)btnCreatePatch:(id)sender;
 + (mbFlipWindow*)flipper;

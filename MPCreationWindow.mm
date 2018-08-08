@@ -106,25 +106,25 @@
         }
         [txtPatchFile setStringValue:selfile];
         currentFormat = [MPPatchWindow detectPatchFormat:selfile];
-        if(currentFormat == UPSPAT){
+        if(currentFormat == MPPatchFormatUPS){
             [lblPatchFormat setStringValue:@"UPS Patch"];
         }
-        else if(currentFormat == IPSPAT){
+        else if(currentFormat == MPPatchFormatIPS){
             [lblPatchFormat setStringValue:@"IPS Patch"];
         }
-        else if(currentFormat == XDELTAPAT){
+        else if(currentFormat == MPPatchFormatXDelta){
             [lblPatchFormat setStringValue:@"XDelta Patch"];
         }
         /*else if(currentFormat == PPFPAT){
             [lblPatchFormat setStringValue:@"PPF Patch"];
         }*/
-        else if(currentFormat == BSDIFFPAT){
+        else if(currentFormat == MPPatchFormatBSDiff){
             [lblPatchFormat setStringValue:@"BSDiff Patch"];
         }
-        else if(currentFormat == BPSPAT){
+        else if(currentFormat == MPPatchFormatBPS){
             if(bps_delta){
                 [lblPatchFormat setStringValue:@"BPS Patch (Delta)"];
-                currentFormat = BPSDELTA;
+                currentFormat = MPPatchFormatBPSDelta;
             }
             else{
                 [lblPatchFormat setStringValue:@"BPS Patch (Linear)"];
@@ -133,7 +133,7 @@
         else{
             [lblPatchFormat setStringValue:@"Unknown"];
         }
-        [btnCreatePatch setEnabled:currentFormat!=UNKNOWNPAT];
+        [btnCreatePatch setEnabled:currentFormat!=MPPatchFormatUnknown];
 	}
 }
 
@@ -182,7 +182,7 @@
 
 - (NSString*)CreatePatch:(NSString*)origFile :(NSString*)modFile :(NSString*)createFile{
     NSString* retval = nil;
-	if(currentFormat == UPSPAT){
+	if(currentFormat == MPPatchFormatUPS){
 		UPS ups; //UPS Patcher
 		bool result = ups.create([origFile cStringUsingEncoding:[NSString defaultCStringEncoding]], [modFile cStringUsingEncoding:[NSString defaultCStringEncoding]], [createFile cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 		if(result == false){
@@ -190,22 +190,22 @@
 			[retval retain];
 		}
 	}
-	else if(currentFormat == IPSPAT){
+	else if(currentFormat == MPPatchFormatIPS){
 		retval = [IPSAdapter createPatch:origFile withMod:modFile andCreate:createFile];
 	}
-	else if(currentFormat == XDELTAPAT){
+	else if(currentFormat == MPPatchFormatXDelta){
         retval = [XDeltaAdapter createPatch:origFile withMod:modFile andCreate:createFile];
 	}
-	else if(currentFormat == PPFPAT){
+	else if(currentFormat == MPPatchFormatPPF){
 		retval = [PPFAdapter createPatch:origFile withMod:modFile andCreate:createFile];
 	}
-    else if(currentFormat == BSDIFFPAT){
+    else if(currentFormat == MPPatchFormatBSDiff){
         retval = [BSdiffAdapter createPatch:origFile withMod:modFile andCreate:createFile];
     }
-    else if(currentFormat == BPSPAT){
+    else if(currentFormat == MPPatchFormatBPS){
         retval = [BPSAdapter createPatchLinear:origFile withMod:modFile andCreate:createFile];
     }
-    else if(currentFormat == BPSDELTA){
+    else if(currentFormat == MPPatchFormatBPSDelta){
         retval = [BPSAdapter createPatchDelta:origFile withMod:modFile andCreate:createFile];
     }
 	return retval;

@@ -12,7 +12,7 @@
     IBOutlet NSTextField *txtPatchFile;
     IBOutlet NSTextFieldCell *lblPatchFormat;
     IBOutlet NSButton *btnCreatePatch;
-    PatchFormat currentFormat;
+    MPPatchFormat currentFormat;
     IBOutlet NSWindow *wndApplyPatch;
     IBOutlet NSPanel *pnlPatching;
     IBOutlet NSTextField *lblStatus;

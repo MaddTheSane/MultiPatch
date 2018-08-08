@@ -6,6 +6,10 @@
 #import "XDeltaAdapter.h"
 #include "xdelta3.h"
 
+NSErrorDomain const XDeltaErrorDomain = @"com.sappharad.MultiPatch.xdelta.error";
+
+static int code (BOOL encode, FILE* InFile, FILE* SrcFile, FILE* OutFile, int BufSize);
+
 @implementation XDeltaAdapter
 +(NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{
 	FILE*  InFile = fopen([patch cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
@@ -44,7 +48,7 @@
 	return nil;
 }
 
-int code (int encode, FILE* InFile, FILE* SrcFile, FILE* OutFile, int BufSize)
+int code (BOOL encode, FILE* InFile, FILE* SrcFile, FILE* OutFile, int BufSize)
 {
     int ret;
     size_t r;
@@ -166,5 +170,48 @@ int code (int encode, FILE* InFile, FILE* SrcFile, FILE* OutFile, int BufSize)
     xd3_free_stream(&stream);
     
     return 0;
-};
+}
+
++ (BOOL)applyPatch:(NSURL *)patch toFile:(NSURL *)input andCreate:(NSURL *)output error:(NSError **)error { 
+	FILE*  InFile = fopen([patch fileSystemRepresentation], "rb");
+	FILE*  SrcFile = fopen([input fileSystemRepresentation], "rb");
+	FILE* OutFile = fopen([output fileSystemRepresentation], "wb");
+	int r = code (0, InFile, SrcFile, OutFile, 0x1000);
+	
+	fclose(OutFile);
+	fclose(SrcFile);
+	fclose(InFile);
+	
+	if (r != 0) {
+		if (error) {
+			if(r == -17712){
+				*error = [NSError errorWithDomain:XDeltaErrorDomain code:r userInfo:@{NSLocalizedDescriptionKey: @"Invalid input. This typically means that the file you selected to patch is not the file your patch is intended for."}];
+			} else {
+				*error = [NSError errorWithDomain:XDeltaErrorDomain code:r userInfo:nil];
+			}
+		}
+		return NO;
+	}
+	
+	return YES;
+}
+
++ (BOOL)createPatch:(NSURL *)orig withMod:(NSURL *)modify andCreate:(NSURL *)output error:(NSError **)error { 
+	FILE* oldFile = fopen([orig fileSystemRepresentation], "rb");
+	FILE* newFile = fopen([modify fileSystemRepresentation], "rb");
+	FILE* deltaFile = fopen([output fileSystemRepresentation], "wb");
+	int r = code (1, newFile, oldFile, deltaFile, 0x1000);
+	
+	fclose(deltaFile);
+	fclose(oldFile);
+	fclose(newFile);
+	
+	if (r != 0 && error) {
+		*error = [NSError errorWithDomain:XDeltaErrorDomain code:r userInfo:nil];
+		return NO;
+	}
+	
+	return YES;
+}
+
 @end

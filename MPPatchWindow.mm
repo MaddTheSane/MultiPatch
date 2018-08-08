@@ -85,24 +85,24 @@ static mbFlipWindow* _flipper;
     NSString* selfile = [patch path];
     [txtPatchPath setStringValue:selfile];
     currentFormat = [MPPatchWindow detectPatchFormat:selfile];
-    [btnApply setEnabled:currentFormat!=UNKNOWNPAT];
+    [btnApply setEnabled:currentFormat!=MPPatchFormatUnknown];
     switch (currentFormat) {
-        case UPSPAT:
+        case MPPatchFormatUPS:
             [lblPatchFormat setStringValue:@"UPS"];
             break;
-        case XDELTAPAT:
+        case MPPatchFormatXDelta:
             [lblPatchFormat setStringValue:@"XDelta"];
             break;
-        case IPSPAT:
+        case MPPatchFormatIPS:
             [lblPatchFormat setStringValue:@"IPS"];
             break;
-        case PPFPAT:
+        case MPPatchFormatPPF:
             [lblPatchFormat setStringValue:@"PPF"];
             break;
-        case BSDIFFPAT:
+        case MPPatchFormatBSDiff:
             [lblPatchFormat setStringValue:@"BSDiff"];
             break;
-        case BPSPAT:
+        case MPPatchFormatBPS:
             [lblPatchFormat setStringValue:@"BPS"];
             break;
         default:
@@ -152,34 +152,34 @@ static mbFlipWindow* _flipper;
     }];
 }
 
-+ (PatchFormat)detectPatchFormat:(NSString*)patchPath{
++ (MPPatchFormat)detectPatchFormat:(NSString*)patchPath{
 	//I'm just going to look at the file extensions for now.
 	//In the future, I might wish to actually look at the contents of the file.
     NSString* lowerPath = [patchPath lowercaseString];
 	if([lowerPath hasSuffix:@".ups"]){
-		return UPSPAT;
+		return MPPatchFormatUPS;
 	}
 	else if([lowerPath hasSuffix:@".ips"]){
-		return IPSPAT;
+		return MPPatchFormatIPS;
 	}
 	else if([lowerPath hasSuffix:@".ppf"]){
-		return PPFPAT;
+		return MPPatchFormatPPF;
 	}
 	else if([lowerPath hasSuffix:@".dat"] || [lowerPath hasSuffix:@"delta"]){
-		return XDELTAPAT;
+		return MPPatchFormatXDelta;
 	}
     else if([lowerPath hasSuffix:@".bdf"] || [lowerPath hasSuffix:@".bsdiff"]){
-        return BSDIFFPAT;
+        return MPPatchFormatBSDiff;
     }
     else if([lowerPath hasSuffix:@".bps"]){
-        return BPSPAT;
+        return MPPatchFormatBPS;
     }
-	return UNKNOWNPAT;
+	return MPPatchFormatUnknown;
 }
 
 - (NSString*)ApplyPatch:(NSString*)patchPath :(NSString*)sourceFile :(NSString*)destFile{
 	NSString* retval = nil;
-	if(currentFormat == UPSPAT){
+	if(currentFormat == MPPatchFormatUPS){
 		UPS ups; //UPS Patcher
 		bool result = ups.apply([sourceFile cStringUsingEncoding:[NSString defaultCStringEncoding]], [destFile cStringUsingEncoding:[NSString defaultCStringEncoding]], [patchPath cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 		if(result == false){
@@ -187,19 +187,19 @@ static mbFlipWindow* _flipper;
 			[retval retain];
 		}
 	}
-	else if(currentFormat == IPSPAT){
+	else if(currentFormat == MPPatchFormatIPS){
 		retval = [IPSAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
 	}
-	else if(currentFormat == XDELTAPAT){
+	else if(currentFormat == MPPatchFormatXDelta){
 		retval = [XDeltaAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
 	}
-	else if(currentFormat == PPFPAT){
+	else if(currentFormat == MPPatchFormatPPF){
 		retval = [PPFAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
 	}
-    else if(currentFormat == BSDIFFPAT){
+    else if(currentFormat == MPPatchFormatBSDiff){
         retval = [BSdiffAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
     }
-    else if(currentFormat == BPSPAT){
+    else if(currentFormat == MPPatchFormatBPS){
         retval = [BPSAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
     }
 	return retval;

@@ -6,35 +6,51 @@
 #import "PPFAdapter.h"
 #include "libppf.hh"
 
+NSErrorDomain const PPFAdaptorErrorDomain = @"com.sappharad.MultiPatch.ppf.error";
+
 @implementation PPFAdapter
+
++(void)initialize
+{
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		[NSError setUserInfoValueProviderForDomain:PPFAdaptorErrorDomain provider:^id _Nullable(NSError * _Nonnull err, NSErrorUserInfoKey  _Nonnull userInfoKey) {
+			if ([userInfoKey isEqualToString:NSLocalizedDescriptionKey]) {
+				return [PPFAdapter errorMsg:(int)err.code];
+			}
+			
+			return nil;
+		}];
+	});
+}
 
 +(NSString*)errorMsg:(int)error{
 	switch (error) {
-		case 0x01:
+		case ERROR_PPF_FORMAT:
 			return @"Selected patch file is NOT a PPF file!";
-		case 0x02:
+		case ERROR_PPF_VERSION:
 			return @"PPF version not supported or unknown.";
-		case 0x03:
+		case ERROR_PPF_EXISTS:
 			return @"PPF file not found!";
-		case 0x04:
+		case ERROR_PPF_OPEN:
 			return @"Error opening PPF file.";
-		case 0x05:
+		case ERROR_PPF_CLOSE:
 			return @"Error closing PPF file.";
-		case 0x06:
+		case ERROR_PPF_READ:
 			return @"Error reading from PPF file.";
-		case 0x07:
+		case ERROR_PPF_LOADED:
 			return @"PPF file hasn't been loaded";
-		case 0x08:
+		case ERROR_PPF_UNDO:
 			return @"No undo data available";
-		case 0x11:
+		case ERROR_ISO_EXISTS:
 			return @"Input file not found.";
-		case 0x12:
+		case ERROR_ISO_OPEN:
 			return @"Error opening file.";
-		case 0x13:
+		case ERROR_ISO_CLOSE:
 			return @"Error closing output file.";
-		case 0x14:
+		case ERROR_ISO_READ:
 			return @"Error reading from input!";
-		case 0x15:
+		case ERROR_ISO_WRITE:
 			return @"Error writing to output file!";
 		default:
 			return @"Unknown error code!";
@@ -68,4 +84,41 @@
 +(NSString*)createPatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
     return @"Oops, PPF creation not supported."; //Success! :-(
 }
++ (BOOL)applyPatch:(NSURL *)patch toFile:(NSURL *)input andCreate:(NSURL *)output error:(NSError **)outError {
+	lppf::LibPPF ppf;
+	int error;
+	
+	if ((error = ppf.loadPatch([patch fileSystemRepresentation])) != 0) {
+		if (outError) {
+			*outError = [NSError errorWithDomain:PPFAdaptorErrorDomain code:error userInfo:nil];
+		}
+		return NO;
+	}
+	
+	if(![input isEqual:output]){
+		NSFileManager* fileMan = [NSFileManager defaultManager];
+		if(![fileMan copyItemAtURL:input toURL:output error:outError])
+		{
+			return NO;
+		}
+	}
+	
+	// Apply PPF data to file
+	if ((error = ppf.applyPatch([output fileSystemRepresentation], false)) != 0) {
+		if (outError) {
+			*outError = [NSError errorWithDomain:PPFAdaptorErrorDomain code:error userInfo:nil];
+		}
+		return NO;
+	}
+	return YES; //Success!
+}
+
++ (BOOL)createPatch:(NSURL *)orig withMod:(NSURL *)modify andCreate:(NSURL *)output error:(NSError **)error {
+	if (error) {
+		*error = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:nil];
+	}
+	
+	return NO;
+}
+
 @end

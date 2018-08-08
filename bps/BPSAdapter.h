@@ -4,6 +4,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MPPatchAdaptor.h"
 
 @interface BPSAdapter : NSObject
 + (NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output;

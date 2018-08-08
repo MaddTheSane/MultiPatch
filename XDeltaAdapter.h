@@ -6,10 +6,12 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
+#import "MPPatchAdaptor.h"
 
-@interface XDeltaAdapter : NSObject {}
+extern NSErrorDomain const XDeltaErrorDomain;
+
+@interface XDeltaAdapter : NSObject <MPPatchAdaptor>
 +(NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output;
-int code (int encode, FILE* InFile, FILE* SrcFile, FILE* OutFile, int BufSize);
 +(NSString*)createPatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output;
 @end
