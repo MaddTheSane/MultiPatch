@@ -206,8 +206,10 @@ int code (BOOL encode, FILE* InFile, FILE* SrcFile, FILE* OutFile, int BufSize)
 	fclose(oldFile);
 	fclose(newFile);
 	
-	if (r != 0 && error) {
-		*error = [NSError errorWithDomain:XDeltaErrorDomain code:r userInfo:nil];
+	if (r != 0) {
+		if (error) {
+			*error = [NSError errorWithDomain:XDeltaErrorDomain code:r userInfo:nil];
+		}
 		return NO;
 	}
 	

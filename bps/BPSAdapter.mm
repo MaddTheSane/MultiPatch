@@ -11,6 +11,21 @@
 NSErrorDomain const BPSAdapterErrorDomain = @"com.sappharad.MultiPatch.bps.error";
 
 @implementation BPSAdapter
+
++ (void)initialize
+{
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		[NSError setUserInfoValueProviderForDomain:BPSAdapterErrorDomain provider:^id _Nullable(NSError * _Nonnull err, NSErrorUserInfoKey  _Nonnull userInfoKey) {
+			if ([userInfoKey isEqualToString:NSLocalizedDescriptionKey]) {
+				return [BPSAdapter TranslateBPSresult:(nall::bpspatch::result)err.code];
+			}
+			
+			return nil;
+		}];
+	});
+}
+
 + (NSString*)TranslateBPSresult:(nall::bpspatch::result)result{
     NSString* retval = nil;
     switch (result) {
