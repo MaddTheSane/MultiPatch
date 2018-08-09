@@ -117,7 +117,7 @@ NSRect RectFromViewToView(NSRect aRect, NSView *fromView, NSView *toView) {
     scaleAnimation.autoreverses = YES;
     
     CAAnimationGroup *animationGroup = [CAAnimationGroup animation];
-    animationGroup.animations = [NSArray arrayWithObjects:flipAnimation, scaleAnimation, nil];
+    animationGroup.animations = @[flipAnimation, scaleAnimation];
     animationGroup.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
     animationGroup.duration = time;
     animationGroup.fillMode = kCAFillModeForwards;
@@ -143,7 +143,7 @@ NSRect RectFromViewToView(NSRect aRect, NSView *fromView, NSView *toView) {
 - (void) flip:(NSWindow *)activeWindow to:(NSWindow *)targetWindow {
     
     CGFloat durat = duration * (activeWindow.currentEvent.modifierFlags & NSShiftKeyMask ? 10.0 : 1.0);
-    CGFloat zDistance = 2500.0f;
+    CGFloat zDistance = 2500.0;
     
     NSView *activeView = [activeWindow.contentView superview];
     NSView *targetView = [targetWindow.contentView superview];

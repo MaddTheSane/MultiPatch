@@ -9,14 +9,14 @@
 
 -(id)init{
     if(self=[super init]){
-        [self registerForDraggedTypes:@[NSURLPboardType]];
+        [self registerForDraggedTypes:@[(NSString*)kUTTypeFileURL]];
     }
     return self;
 }
 
 -(id)initWithCoder:(NSCoder *)coder{
     if(self=[super initWithCoder:coder]){
-        [self registerForDraggedTypes:@[NSURLPboardType]];
+        [self registerForDraggedTypes:@[(NSString*)kUTTypeFileURL]];
     }
     return self;
 }
