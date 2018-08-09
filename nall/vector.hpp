@@ -17,16 +17,16 @@ namespace nall {
 
   protected:
     T *pool;
-    unsigned poolsize;
-    unsigned objectsize;
+    unsigned long poolsize;
+    unsigned long objectsize;
 
   public:
     operator bool() const { return pool; }
     T* data() { return pool; }
 
     bool empty() const { return objectsize == 0; }
-    unsigned size() const { return objectsize; }
-    unsigned capacity() const { return poolsize; }
+    unsigned long size() const { return objectsize; }
+    unsigned long capacity() const { return poolsize; }
 
     T* move() {
       T *result = pool;
@@ -38,7 +38,7 @@ namespace nall {
 
     void reset() {
       if(pool) {
-        for(unsigned n = 0; n < objectsize; n++) pool[n].~T();
+        for(unsigned long n = 0; n < objectsize; n++) pool[n].~T();
         free(pool);
       }
       pool = nullptr;
@@ -46,11 +46,11 @@ namespace nall {
       objectsize = 0;
     }
 
-    void reserve(unsigned size) {
+    void reserve(unsigned long size) {
       size = bit::round(size);  //amortize growth
       T *copy = (T*)calloc(size, sizeof(T));
-      for(unsigned n = 0; n < min(size, objectsize); n++) new(copy + n) T(pool[n]);
-      for(unsigned n = 0; n < objectsize; n++) pool[n].~T();
+      for(unsigned long n = 0; n < min(size, objectsize); n++) new(copy + n) T(pool[n]);
+      for(unsigned long n = 0; n < objectsize; n++) pool[n].~T();
       free(pool);
       pool = copy;
       poolsize = size;
@@ -58,7 +58,7 @@ namespace nall {
     }
 
     //requires trivial constructor
-    void resize(unsigned size) {
+    void resize(unsigned long size) {
       if(size == objectsize) return;
       if(size < objectsize) return reserve(size);
       while(size > objectsize) append(T());
@@ -81,9 +81,9 @@ namespace nall {
       return true;
     }
 
-    void insert(unsigned position, const T& data) {
+    void insert(unsigned long position, const T& data) {
       append(data);
-      for(signed n = size() - 1; n > position; n--) pool[n] = pool[n - 1];
+      for(signed long n = size() - 1; n > position; n--) pool[n] = pool[n - 1];
       pool[position] = data;
     }
 
@@ -91,13 +91,13 @@ namespace nall {
       insert(0, data);
     }
 
-    void remove(unsigned index = ~0u, unsigned count = 1) {
+    void remove(unsigned long index = ~0ul, unsigned count = 1) {
       if(index == ~0) index = objectsize ? objectsize - 1 : 0;
-      for(unsigned n = index; count + n < objectsize; n++) pool[n] = pool[count + n];
+      for(unsigned long n = index; count + n < objectsize; n++) pool[n] = pool[count + n];
       objectsize = (count + index >= objectsize) ? index : objectsize - count;
     }
 
-    T take(unsigned index = ~0u) {
+    T take(unsigned long index = ~0ul) {
       if(index == ~0) index = objectsize ? objectsize - 1 : 0;
       if(index >= objectsize) throw exception_out_of_bounds();
       T item = pool[index];
@@ -106,7 +106,7 @@ namespace nall {
     }
 
     void reverse() {
-      unsigned pivot = size() / 2;
+      unsigned long pivot = size() / 2;
       for(unsigned l = 0, r = size() - 1; l < pivot; l++, r--) {
         std::swap(pool[l], pool[r]);
       }
@@ -120,8 +120,8 @@ namespace nall {
       nall::sort(pool, objectsize, lessthan);
     }
 
-    optional<unsigned> find(const T& data) {
-      for(unsigned n = 0; n < size(); n++) if(pool[n] == data) return { true, n };
+    optional<unsigned long> find(const T& data) {
+      for(unsigned long n = 0; n < size(); n++) if(pool[n] == data) return { true, n };
       return { false, 0u };
     }
 
@@ -136,23 +136,23 @@ namespace nall {
     }
 
     //access
-    inline T& operator[](unsigned position) {
+    inline T& operator[](unsigned long position) {
       if(position >= objectsize) throw exception_out_of_bounds();
       return pool[position];
     }
 
-    inline const T& operator[](unsigned position) const {
+    inline const T& operator[](unsigned long position) const {
       if(position >= objectsize) throw exception_out_of_bounds();
       return pool[position];
     }
 
-    inline T& operator()(unsigned position) {
+    inline T& operator()(unsigned long position) {
       if(position >= poolsize) reserve(position + 1);
       while(position >= objectsize) append(T());
       return pool[position];
     }
 
-    inline const T& operator()(unsigned position, const T& data) const {
+    inline const T& operator()(unsigned long position, const T& data) const {
       if(position >= objectsize) return data;
       return pool[position];
     }

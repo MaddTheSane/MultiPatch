@@ -56,7 +56,7 @@ char* string::operator()() {
   return data;
 }
 
-char& string::operator[](int index) {
+char& string::operator[](long index) {
   reserve(index);
   return data[index];
 }
@@ -122,7 +122,7 @@ bool string::readfile(const string &filename) {
   size_t size = ftell(fp);
   rewind(fp);
   char *fdata = new char[size + 1];
-  size_t unused = fread(fdata, 1, size, fp);
+  (void)fread(fdata, 1, size, fp);
   fclose(fp);
   fdata[size] = 0;
   assign(fdata);

@@ -34,9 +34,9 @@ bool quotecopy(char *&t, T *&p) {
   return true;
 }
 
-string substr(const char *src, unsigned start, unsigned length) {
+string substr(const char *src, size_t start, size_t length) {
   string dest;
-  if(length == ~0u) {
+  if(length == ~0ul) {
     //copy entire string
     dest.reserve(strlen(src + start) + 1);
     strcpy(dest(), src + start);
@@ -98,7 +98,7 @@ char* decimal(char *result, uintmax_t value) {
 
 /* general-purpose arithmetic -> string */
 
-template<unsigned length_, char padding> string integer(intmax_t value) {
+template<size_t length_, char padding> string integer(intmax_t value) {
   bool negative = value < 0;
   if(negative) value = -value;
 
@@ -125,7 +125,7 @@ template<unsigned length_, char padding> string integer(intmax_t value) {
   return (const char*)result;
 }
 
-template<unsigned length_, char padding> string linteger(intmax_t value) {
+template<size_t length_, char padding> string linteger(intmax_t value) {
   bool negative = value < 0;
   if(negative) value = -value;
 
@@ -152,7 +152,7 @@ template<unsigned length_, char padding> string linteger(intmax_t value) {
   return (const char*)result;
 }
 
-template<unsigned length_, char padding> string decimal(uintmax_t value) {
+template<size_t length_, char padding> string decimal(uintmax_t value) {
   char buffer[64];
   unsigned size = 0;
 
@@ -175,7 +175,7 @@ template<unsigned length_, char padding> string decimal(uintmax_t value) {
   return (const char*)result;
 }
 
-template<unsigned length_, char padding> string ldecimal(uintmax_t value) {
+template<size_t length_, char padding> string ldecimal(uintmax_t value) {
   char buffer[64];
   unsigned size = 0;
 
@@ -198,7 +198,7 @@ template<unsigned length_, char padding> string ldecimal(uintmax_t value) {
   return (const char*)result;
 }
 
-template<unsigned length_, char padding> string hex(uintmax_t value) {
+template<size_t length_, char padding> string hex(uintmax_t value) {
   char buffer[64];
   unsigned size = 0;
 
@@ -220,7 +220,7 @@ template<unsigned length_, char padding> string hex(uintmax_t value) {
   return (const char*)result;
 }
 
-template<unsigned length_, char padding> string binary(uintmax_t value) {
+template<size_t length_, char padding> string binary(uintmax_t value) {
   char buffer[256];
   unsigned size = 0;
 
@@ -245,7 +245,7 @@ template<unsigned length_, char padding> string binary(uintmax_t value) {
 //using sprintf is certainly not the most ideal method to convert
 //a double to a string ... but attempting to parse a double by
 //hand, digit-by-digit, results in subtle rounding errors.
-unsigned fp(char *str, long double value) {
+size_t fp(char *str, long double value) {
   char buffer[256];
   #ifdef _WIN32
   //Windows C-runtime does not support long double via sprintf()
@@ -266,7 +266,7 @@ unsigned fp(char *str, long double value) {
     }
   }
 
-  unsigned length = strlen(buffer);
+  size_t length = strlen(buffer);
   if(str) strcpy(str, buffer);
   return length + 1;
 }

@@ -70,9 +70,9 @@ bool UPS::apply(const char *x, const char *y, const char *z) {
   uint64_t sizez = fz.size();
   if(sizez < 20) { error = "Patch file invalid (file size too small.)"; close(); return false; }
   fz.seek(sizez - 12);
-  uint32_t rcrcx = fz.readl(4);
-  uint32_t rcrcy = fz.readl(4);
-  uint32_t rcrcz = fz.readl(4);
+  uint32_t rcrcx = uint32_t(fz.readl(4));
+  uint32_t rcrcy = uint32_t(fz.readl(4));
+  uint32_t rcrcz = uint32_t(fz.readl(4));
 
   fz.seek(0);
   crcz = ~0;

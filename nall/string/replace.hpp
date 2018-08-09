@@ -21,7 +21,7 @@ string& string::ureplace(const char *key, const char *token) {
   if(Limit) counter = min(counter, Limit);
 
   char *t = data, *base;
-  unsigned tokenLength = strlen(token);
+  size_t tokenLength = strlen(token);
   if(tokenLength > keyLength) {
     t = base = strdup(data);
     reserve((unsigned)(p - data) + ((tokenLength - keyLength) * counter));

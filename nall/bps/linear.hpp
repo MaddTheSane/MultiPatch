@@ -10,8 +10,8 @@
 namespace nall {
 
 struct bpslinear {
-  inline void source(const uint8_t *data, unsigned size);
-  inline void target(const uint8_t *data, unsigned size);
+  inline void source(const uint8_t *data, size_t size);
+  inline void target(const uint8_t *data, size_t size);
 
   inline bool source(const string &filename);
   inline bool target(const string &filename);
@@ -23,19 +23,19 @@ protected:
 
   filemap sourceFile;
   const uint8_t *sourceData;
-  unsigned sourceSize;
+  size_t sourceSize;
 
   filemap targetFile;
   const uint8_t *targetData;
-  unsigned targetSize;
+  size_t targetSize;
 };
 
-void bpslinear::source(const uint8_t *data, unsigned size) {
+void bpslinear::source(const uint8_t *data, size_t size) {
   sourceData = data;
   sourceSize = size;
 }
 
-void bpslinear::target(const uint8_t *data, unsigned size) {
+void bpslinear::target(const uint8_t *data, size_t size) {
   targetData = data;
   targetSize = size;
 }
@@ -95,9 +95,9 @@ bool bpslinear::create(const string &filename, const string &metadata) {
   encode(sourceSize);
   encode(targetSize);
 
-  unsigned markupSize = metadata.length();
+  size_t markupSize = metadata.length();
   encode(markupSize);
-  for(unsigned n = 0; n < markupSize; n++) write(metadata[n]);
+  for(size_t n = 0; n < markupSize; n++) write(metadata[n]);
 
   while(outputOffset < targetSize) {
     unsigned sourceLength = 0;

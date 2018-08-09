@@ -2,6 +2,7 @@
 #define NALL_CRC32_HPP
 
 #include "stdint.hpp"
+#include <sys/types.h>
 
 namespace nall {
   const uint32_t crc32_table[256] = {
@@ -54,9 +55,9 @@ namespace nall {
     return ((crc32 >> 8) & 0x00ffffff) ^ crc32_table[(crc32 ^ input) & 0xff];
   }
 
-  inline uint32_t crc32_calculate(const uint8_t *data, unsigned length) {
+  inline uint32_t crc32_calculate(const uint8_t *data, size_t length) {
     uint32_t crc32 = ~0;
-    for(unsigned i = 0; i < length; i++) {
+    for(size_t i = 0; i < length; i++) {
       crc32 = crc32_adjust(crc32, data[i]);
     }
     return ~crc32;

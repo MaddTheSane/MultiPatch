@@ -32,7 +32,7 @@ struct Node {
   }
 
   //copy part of string from source document into target string; decode markup while copying
-  inline void copy(string &target, const char *source, unsigned length) {
+  inline void copy(string &target, const char *source, size_t length) {
     target.reserve(length + 1);
 
     #if defined(NALL_XML_LITERAL)
@@ -198,10 +198,10 @@ struct Node {
     inline bool operator!=(const iterator &source) const { return index != source.index; }
     inline Node& operator*() { return *node.children[index]; }
     inline iterator& operator++() { index++; return *this; }
-    inline iterator(const Node &node, unsigned index) : node(node), index(index) {}
+    inline iterator(const Node &node, size_t index) : node(node), index(index) {}
   private:
     const Node &node;
-    unsigned index;
+    size_t index;
   };
 
   inline iterator begin() { return iterator(*this, 0); }

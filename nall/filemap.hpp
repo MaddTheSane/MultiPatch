@@ -3,7 +3,9 @@
 
 #include "file.hpp"
 #include "stdint.hpp"
+#if defined(_WIN32)
 #include "windows/utf8.hpp"
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +27,7 @@ namespace nall {
     bool open() const { return p_open(); }
     bool open(const char *filename, mode mode_) { return p_open(filename, mode_); }
     void close() { return p_close(); }
-    unsigned size() const { return p_size; }
+    size_t size() const { return p_size; }
     uint8_t* data() { return p_handle; }
     const uint8_t* data() const { return p_handle; }
     filemap() : p_size(0), p_handle(0) { p_ctor(); }
@@ -33,7 +35,7 @@ namespace nall {
     ~filemap() { p_dtor(); }
 
   private:
-    unsigned p_size;
+    size_t p_size;
     uint8_t *p_handle;
 
     #if defined(_WIN32)

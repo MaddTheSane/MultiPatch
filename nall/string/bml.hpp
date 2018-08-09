@@ -109,7 +109,7 @@ public:
   }
 
   inline bool exists() const { return name; }
-  unsigned size() const { return children.size(); }
+  size_t size() const { return children.size(); }
   Node* begin() { return children.begin(); }
   Node* end() { return children.end(); }
   const Node* begin() const { return children.begin(); }

@@ -44,7 +44,7 @@ namespace nall {
 
     static bool truncate(const string &filename, unsigned size) {
       #if !defined(_WIN32)
-      return truncate(filename, size) == 0;
+      return ::truncate(filename, size) == 0;
       #else
       bool result = false;
       FILE *fp = fopen(filename, "rb+");
@@ -66,7 +66,7 @@ namespace nall {
       return memory;
     }
 
-    static bool read(const string &filename, uint8_t *data, unsigned size) {
+    static bool read(const string &filename, uint8_t *data, size_t size) {
       file fp;
       if(fp.open(filename, mode::read) == false) return false;
       fp.read(data, size);
@@ -74,7 +74,7 @@ namespace nall {
       return true;
     }
 
-    static bool write(const string &filename, const uint8_t *data, unsigned size) {
+    static bool write(const string &filename, const uint8_t *data, size_t size) {
       file fp;
       if(fp.open(filename, mode::write) == false) return false;
       fp.write(data, size);
@@ -107,7 +107,7 @@ namespace nall {
       return data;
     }
 
-    void read(uint8_t *buffer, unsigned length) {
+    void read(uint8_t *buffer, size_t length) {
       while(length--) *buffer++ = read();
     }
 
@@ -133,7 +133,7 @@ namespace nall {
       }
     }
 
-    void write(const uint8_t *buffer, unsigned length) {
+    void write(const uint8_t *buffer, size_t length) {
       while(length--) write(*buffer++);
     }
 
@@ -148,11 +148,11 @@ namespace nall {
       fflush(fp);
     }
 
-    void seek(int offset, index index_ = index::absolute) {
+    void seek(off_t offset, index index_ = index::absolute) {
       if(!fp) return;  //file not open
       buffer_flush();
 
-      uintmax_t req_offset = file_offset;
+      intmax_t req_offset = file_offset;
       switch(index_) {
         case index::absolute: req_offset  = offset; break;
         case index::relative: req_offset += offset; break;
@@ -171,12 +171,12 @@ namespace nall {
       file_offset = req_offset;
     }
 
-    unsigned offset() const {
+    unsigned long offset() const {
       if(!fp) return 0;  //file not open
       return file_offset;
     }
 
-    unsigned size() const {
+    unsigned long size() const {
       if(!fp) return 0;  //file not open
       return file_size;
     }
@@ -296,11 +296,11 @@ namespace nall {
   private:
     enum { buffer_size = 1 << 12, buffer_mask = buffer_size - 1 };
     char buffer[buffer_size];
-    int buffer_offset;
+    long buffer_offset;
     bool buffer_dirty;
     FILE *fp;
-    unsigned file_offset;
-    unsigned file_size;
+    unsigned long file_offset;
+    unsigned long file_size;
     mode file_mode;
 
     void buffer_sync() {

@@ -8,11 +8,11 @@ namespace nall {
 
   struct cstring {
     inline operator const char*() const;
-    inline unsigned length() const;
+    inline size_t length() const;
     inline bool operator==(const char*) const;
     inline bool operator!=(const char*) const;
-    inline optional<unsigned> position(const char *key) const;
-    inline optional<unsigned> iposition(const char *key) const;
+    inline optional<size_t> position(const char *key) const;
+    inline optional<size_t> iposition(const char *key) const;
     inline cstring& operator=(const char *data);
     inline cstring(const char *data);
     inline cstring();
@@ -37,8 +37,8 @@ namespace nall {
     template<unsigned Limit = 0> inline string& qreplace(const char*, const char*);
     template<unsigned Limit = 0> inline string& iqreplace(const char*, const char*);
 
-    inline unsigned length() const;
-    inline unsigned capacity() const;
+    inline size_t length() const;
+    inline size_t capacity() const;
 
     template<unsigned Limit = 0> inline lstring split(const char*) const;
     template<unsigned Limit = 0> inline lstring isplit(const char*) const;
@@ -66,15 +66,15 @@ namespace nall {
     template<unsigned limit = 0> inline string& rtrim(const char *key = " ");
     template<unsigned limit = 0> inline string& trim(const char *key = " ", const char *rkey = 0);
 
-    inline optional<unsigned> position(const char *key) const;
-    inline optional<unsigned> iposition(const char *key) const;
-    inline optional<unsigned> qposition(const char *key) const;
-    inline optional<unsigned> iqposition(const char *key) const;
+    inline optional<size_t> position(const char *key) const;
+    inline optional<size_t> iposition(const char *key) const;
+    inline optional<size_t> qposition(const char *key) const;
+    inline optional<size_t> iqposition(const char *key) const;
 
     inline operator const char*() const;
     inline char* operator()();
-    inline char& operator[](int);
-
+    inline char& operator[](long);
+    
     inline bool operator==(const char*) const;
     inline bool operator!=(const char*) const;
     inline bool operator< (const char*) const;
@@ -173,11 +173,11 @@ namespace nall {
   inline void strpcpy(char *&target, const char *source, size_t &length);
 
   //strpos.hpp
-  inline optional<unsigned> strpos(const char *str, const char *key);
-  inline optional<unsigned> istrpos(const char *str, const char *key);
-  inline optional<unsigned> qstrpos(const char *str, const char *key);
-  inline optional<unsigned> iqstrpos(const char *str, const char *key);
-  template<bool Insensitive = false, bool Quoted = false> inline optional<unsigned> ustrpos(const char *str, const char *key);
+  inline optional<size_t> strpos(const char *str, const char *key);
+  inline optional<size_t> istrpos(const char *str, const char *key);
+  inline optional<size_t> qstrpos(const char *str, const char *key);
+  inline optional<size_t> iqstrpos(const char *str, const char *key);
+  template<bool Insensitive = false, bool Quoted = false> inline optional<size_t> ustrpos(const char *str, const char *key);
 
   //trim.hpp
   template<unsigned limit = 0> inline char* ltrim(char *str, const char *key = " ");
@@ -188,19 +188,19 @@ namespace nall {
   template<bool Insensitive> alwaysinline bool chrequal(char x, char y);
   template<bool Quoted, typename T> alwaysinline bool quoteskip(T *&p);
   template<bool Quoted, typename T> alwaysinline bool quotecopy(char *&t, T *&p);
-  inline string substr(const char *src, unsigned start = 0, unsigned length = ~0u);
+  inline string substr(const char *src, size_t start = 0, size_t length = ~0ul);
   inline string sha256(const uint8_t *data, unsigned size);
 
   inline char* integer(char *result, intmax_t value);
   inline char* decimal(char *result, uintmax_t value);
 
-  template<unsigned length = 0, char padding = ' '> inline string integer(intmax_t value);
-  template<unsigned length = 0, char padding = ' '> inline string linteger(intmax_t value);
-  template<unsigned length = 0, char padding = ' '> inline string decimal(uintmax_t value);
-  template<unsigned length = 0, char padding = ' '> inline string ldecimal(uintmax_t value);
-  template<unsigned length = 0, char padding = '0'> inline string hex(uintmax_t value);
-  template<unsigned length = 0, char padding = '0'> inline string binary(uintmax_t value);
-  inline unsigned fp(char *str, long double value);
+  template<size_t length = 0, char padding = ' '> inline string integer(intmax_t value);
+  template<size_t length = 0, char padding = ' '> inline string linteger(intmax_t value);
+  template<size_t length = 0, char padding = ' '> inline string decimal(uintmax_t value);
+  template<size_t length = 0, char padding = ' '> inline string ldecimal(uintmax_t value);
+  template<size_t length = 0, char padding = '0'> inline string hex(uintmax_t value);
+  template<size_t length = 0, char padding = '0'> inline string binary(uintmax_t value);
+  inline size_t fp(char *str, long double value);
   inline string fp(long double value);
 
   //variadic.hpp

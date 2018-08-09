@@ -133,7 +133,7 @@ static double eval(const char *&s, int depth = 0) {
   return value;
 }
 
-static bool eval(const char *s, double &result) {
+static inline bool eval(const char *s, double &result) {
   try {
     result = eval(s);
     return true;
@@ -143,7 +143,7 @@ static bool eval(const char *s, double &result) {
   }
 }
 
-static double parse(const char *s) {
+static inline double parse(const char *s) {
   try {
     double result = eval(s);
     return result;

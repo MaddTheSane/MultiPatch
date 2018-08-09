@@ -92,9 +92,9 @@ bool bpsdelta::create(const string &filename, const string &metadata) {
   encode(sourceSize);
   encode(targetSize);
 
-  unsigned markupSize = metadata.length();
+  size_t markupSize = metadata.length();
   encode(markupSize);
-  for(unsigned n = 0; n < markupSize; n++) write(metadata[n]);
+  for(size_t n = 0; n < markupSize; n++) write(metadata[n]);
 
   Node *sourceTree[65536], *targetTree[65536];
   for(unsigned n = 0; n < 65536; n++) {sourceTree[n] = 0; targetTree[n] = 0;}

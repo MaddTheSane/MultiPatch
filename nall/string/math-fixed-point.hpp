@@ -142,7 +142,7 @@ static intmax_t eval(const char *&s, int depth = 0) {
   return value;
 }
 
-static bool eval(const char *s, intmax_t &result) {
+static inline bool eval(const char *s, intmax_t &result) {
   try {
     result = eval(s);
     return true;
@@ -152,7 +152,7 @@ static bool eval(const char *s, intmax_t &result) {
   }
 }
 
-static intmax_t parse(const char *s) {
+static inline intmax_t parse(const char *s) {
   try {
     intmax_t result = eval(s);
     return result;

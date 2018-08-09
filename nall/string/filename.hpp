@@ -6,7 +6,7 @@ namespace nall {
 // "/foo/" -> "/foo/"
 // "bar.c" -> "./"
 inline string dir(string name) {
-  for(signed i = name.length(); i >= 0; i--) {
+  for(ssize_t i = name.length(); i >= 0; i--) {
     if(name[i] == '/' || name[i] == '\\') {
       name[i + 1] = 0;
       break;
@@ -20,7 +20,7 @@ inline string dir(string name) {
 // "/foo/" -> ""
 // "bar.c" -> "bar.c"
 inline string notdir(string name) {
-  for(signed i = name.length(); i >= 0; i--) {
+  for(ssize_t i = name.length(); i >= 0; i--) {
     if(name[i] == '/' || name[i] == '\\') {
       return (const char*)name + i + 1;
     }
@@ -32,8 +32,8 @@ inline string notdir(string name) {
 // "/foo/bar/" -> "/foo/"
 // "/foo/bar" -> "/foo/"
 inline string parentdir(string name) {
-  unsigned length = name.length(), paths = 0, prev, last;
-  for(unsigned i = 0; i < length; i++) {
+  size_t length = name.length(), paths = 0, prev, last;
+  for(size_t i = 0; i < length; i++) {
     if(name[i] == '/' || name[i] == '\\') {
       paths++;
       prev = last;
@@ -47,7 +47,7 @@ inline string parentdir(string name) {
 
 // "/foo/bar.c" -> "/foo/bar"
 inline string basename(string name) {
-  for(signed i = name.length(); i >= 0; i--) {
+  for(ssize_t i = name.length(); i >= 0; i--) {
     if(name[i] == '/' || name[i] == '\\') break;  //file has no extension
     if(name[i] == '.') {
       name[i] = 0;
@@ -60,7 +60,7 @@ inline string basename(string name) {
 // "/foo/bar.c" -> "c"
 // "/foo/bar" -> ""
 inline string extension(string name) {
-  for(signed i = name.length(); i >= 0; i--) {
+  for(ssize_t i = name.length(); i >= 0; i--) {
     if(name[i] == '/' || name[i] == '\\') return "";  //file has no extension
     if(name[i] == '.') {
       return (const char*)name + i + 1;

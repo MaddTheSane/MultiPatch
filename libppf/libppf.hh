@@ -56,7 +56,7 @@ namespace lppf {
          int applyPatch(string filename, bool undo);
          void dumpInfo();
          int getBytes() {return totalSize;}
-         unsigned getChunks() {return chunks.size();}
+         size_t getChunks() {return chunks.size();}
          string getPPF() {return ppfName;}
          string getISO() {return isoName;}
 
