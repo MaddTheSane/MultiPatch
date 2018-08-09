@@ -28,12 +28,12 @@ struct memorystream : stream {
   memorystream() : pdata(nullptr), psize(0), poffset(0), pwritable(true) {}
 
   memorystream(uint8_t *data, unsigned size) {
-    pdata = data, psize = size, poffset = 0;
+    pdata = data; psize = size; poffset = 0;
     pwritable = true;
   }
 
   memorystream(const uint8_t *data, unsigned size) {
-    pdata = (uint8_t*)data, psize = size, poffset = 0;
+    pdata = (uint8_t*)data; psize = size; poffset = 0;
     pwritable = false;
   }
 

@@ -97,7 +97,7 @@ bool bpsdelta::create(const string &filename, const string &metadata) {
   for(unsigned n = 0; n < markupSize; n++) write(metadata[n]);
 
   Node *sourceTree[65536], *targetTree[65536];
-  for(unsigned n = 0; n < 65536; n++) sourceTree[n] = 0, targetTree[n] = 0;
+  for(unsigned n = 0; n < 65536; n++) {sourceTree[n] = 0; targetTree[n] = 0;}
 
   //source tree creation
   for(unsigned offset = 0; offset < sourceSize; offset++) {
@@ -116,7 +116,7 @@ bool bpsdelta::create(const string &filename, const string &metadata) {
     if(targetReadLength) {
       encode(TargetRead | ((targetReadLength - 1) << 2));
       unsigned offset = outputOffset - targetReadLength;
-      while(targetReadLength) write(targetData[offset++]), targetReadLength--;
+      while(targetReadLength) {write(targetData[offset++]); targetReadLength--;}
     }
   };
 
@@ -132,7 +132,7 @@ bool bpsdelta::create(const string &filename, const string &metadata) {
         length++;
         offset++;
       }
-      if(length > maxLength) maxLength = length, mode = SourceRead;
+      if(length > maxLength) {maxLength = length; mode = SourceRead;}
     }
 
     { //source copy
@@ -140,7 +140,7 @@ bool bpsdelta::create(const string &filename, const string &metadata) {
       while(node) {
         unsigned length = 0, x = node->offset, y = outputOffset;
         while(x < sourceSize && y < targetSize && sourceData[x++] == targetData[y++]) length++;
-        if(length > maxLength) maxLength = length, maxOffset = node->offset, mode = SourceCopy;
+        if(length > maxLength) {maxLength = length; maxOffset = node->offset; mode = SourceCopy;}
         node = node->next;
       }
     }
@@ -150,7 +150,7 @@ bool bpsdelta::create(const string &filename, const string &metadata) {
       while(node) {
         unsigned length = 0, x = node->offset, y = outputOffset;
         while(y < targetSize && targetData[x++] == targetData[y++]) length++;
-        if(length > maxLength) maxLength = length, maxOffset = node->offset, mode = TargetCopy;
+        if(length > maxLength) {maxLength = length; maxOffset = node->offset; mode = TargetCopy;}
         node = node->next;
       }
 

@@ -24,7 +24,7 @@ namespace nall {
   struct string {
     inline static string read(const string &filename);
 
-    inline void reserve(unsigned);
+    inline void reserve(size_t);
     inline bool empty() const;
 
     template<typename... Args> inline string& assign(Args&&... args);
@@ -101,7 +101,7 @@ namespace nall {
 
   protected:
     char *data;
-    unsigned size;
+    size_t size;
 
     template<unsigned Limit, bool Insensitive, bool Quoted> inline string& ureplace(const char*, const char*);
 
@@ -166,11 +166,11 @@ namespace nall {
   inline string temppath();
 
   //strm.hpp
-  inline unsigned strmcpy(char *target, const char *source, unsigned length);
-  inline unsigned strmcat(char *target, const char *source, unsigned length);
-  inline bool strccpy(char *target, const char *source, unsigned length);
-  inline bool strccat(char *target, const char *source, unsigned length);
-  inline void strpcpy(char *&target, const char *source, unsigned &length);
+  inline size_t strmcpy(char *target, const char *source, size_t length);
+  inline size_t strmcat(char *target, const char *source, size_t length);
+  inline bool strccpy(char *target, const char *source, size_t length);
+  inline bool strccat(char *target, const char *source, size_t length);
+  inline void strpcpy(char *&target, const char *source, size_t &length);
 
   //strpos.hpp
   inline optional<unsigned> strpos(const char *str, const char *key);

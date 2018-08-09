@@ -11,7 +11,7 @@ static void istring(string &output, const T &value, Args&&... args) {
   istring(output, std::forward<Args>(args)...);
 }
 
-void string::reserve(unsigned size_) {
+void string::reserve(size_t size_) {
   if(size_ > size) {
     size = size_;
     data = (char*)realloc(data, size + 1);
@@ -35,14 +35,14 @@ template<typename... Args> string& string::append(Args&&... args) {
 }
 
 string& string::assign_(const char *s) {
-  unsigned length = strlen(s);
+  size_t length = strlen(s);
   reserve(length);
   strcpy(data, s);
   return *this;
 }
 
 string& string::append_(const char *s) {
-  unsigned length = strlen(data) + strlen(s);
+  size_t length = strlen(data) + strlen(s);
   reserve(length);
   strcat(data, s);
   return *this;
@@ -119,10 +119,10 @@ bool string::readfile(const string &filename) {
   if(!fp) return false;
 
   fseek(fp, 0, SEEK_END);
-  unsigned size = ftell(fp);
+  size_t size = ftell(fp);
   rewind(fp);
   char *fdata = new char[size + 1];
-  unsigned unused = fread(fdata, 1, size, fp);
+  size_t unused = fread(fdata, 1, size, fp);
   fclose(fp);
   fdata[size] = 0;
   assign(fdata);

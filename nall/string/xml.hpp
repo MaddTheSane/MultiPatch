@@ -54,22 +54,22 @@ struct Node {
       if(attribute == false && source[0] == '<' && source[1] == '!') {
         //comment
         if(!memcmp(source, "<!--", 4)) {
-          source += 4, length -= 4;
-          while(memcmp(source, "-->", 3)) source++, length--;
-          source += 3, length -= 3;
+          source += 4; length -= 4;
+          while(memcmp(source, "-->", 3)) {source++; length--;}
+          source += 3; length -= 3;
           continue;
         }
 
         //CDATA
         if(!memcmp(source, "<![CDATA[", 9)) {
-          source += 9, length -= 9;
-          while(memcmp(source, "]]>", 3)) *output++ = *source++, length--;
-          source += 3, length -= 3;
+          source += 9; length -= 9;
+          while(memcmp(source, "]]>", 3)) {*output++ = *source++; length--;}
+          source += 3; length -= 3;
           continue;
         }
       }
 
-      *output++ = *source++, length--;
+      *output++ = *source++; length--;
     }
     *output = 0;
   }

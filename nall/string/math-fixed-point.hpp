@@ -82,7 +82,7 @@ static intmax_t eval(const char *&s, int depth = 0) {
   while(true) {
     while(*s == ' ' || *s == '\t') s++;  //trim whitespace
     if(!*s) break;
-    x = *s, y = *(s + 1);
+    x = *s; y = *(s + 1);
 
     if(depth >= 13) break;
     if(x == '*') { value *= eval(++s, 13); continue; }

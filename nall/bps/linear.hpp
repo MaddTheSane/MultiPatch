@@ -83,7 +83,7 @@ bool bpslinear::create(const string &filename, const string &metadata) {
     if(targetReadLength) {
       encode(TargetRead | ((targetReadLength - 1) << 2));
       unsigned offset = outputOffset - targetReadLength;
-      while(targetReadLength) write(targetData[offset++]), targetReadLength--;
+      while(targetReadLength) {write(targetData[offset++]); targetReadLength--;}
     }
   };
 

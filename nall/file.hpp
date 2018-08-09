@@ -196,7 +196,10 @@ namespace nall {
     }
 
     static bool exists(const string &filename) {
-      #if !defined(_WIN32)
+      #ifdef __APPLE__
+      struct stat data;
+      return stat(filename, &data);
+      #elif !defined(_WIN32)
       struct stat64 data;
       return stat64(filename, &data) == 0;
       #else
@@ -206,7 +209,10 @@ namespace nall {
     }
 
     static uintmax_t size(const string &filename) {
-      #if !defined(_WIN32)
+      #ifdef __APPLE__
+      struct stat data;
+      stat(filename, &data);
+      #elif !defined(_WIN32)
       struct stat64 data;
       stat64(filename, &data);
       #else
@@ -217,7 +223,10 @@ namespace nall {
     }
 
     static time_t timestamp(const string &filename, file::time mode = file::time::create) {
-      #if !defined(_WIN32)
+      #ifdef __APPLE__
+      struct stat data;
+      stat(filename, &data);
+      #elif !defined(_WIN32)
       struct stat64 data;
       stat64(filename, &data);
       #else
@@ -301,7 +310,7 @@ namespace nall {
         buffer_offset = file_offset & ~buffer_mask;
         fseek(fp, buffer_offset, SEEK_SET);
         unsigned length = (buffer_offset + buffer_size) <= file_size ? buffer_size : (file_size & buffer_mask);
-        if(length) unsigned unused = fread(buffer, 1, length, fp);
+        if(length) (void)fread(buffer, 1, length, fp);
       }
     }
 
@@ -312,7 +321,7 @@ namespace nall {
       if(buffer_dirty == false) return;    //buffer unmodified since read
       fseek(fp, buffer_offset, SEEK_SET);
       unsigned length = (buffer_offset + buffer_size) <= file_size ? buffer_size : (file_size & buffer_mask);
-      if(length) unsigned unused = fwrite(buffer, 1, length, fp);
+      if(length) (void)fwrite(buffer, 1, length, fp);
       buffer_offset = -1;                  //invalidate buffer
       buffer_dirty = false;
     }

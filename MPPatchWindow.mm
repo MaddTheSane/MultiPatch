@@ -114,7 +114,7 @@ static mbFlipWindow* _flipper;
 - (IBAction)btnSelectPatch:(id)sender{
 	NSOpenPanel *fbox = [NSOpenPanel openPanel];
     [fbox beginSheetModalForWindow:self completionHandler:^(NSInteger result) {
-        if(result == NSOKButton){
+        if(result == NSModalResponseOK){
             [self setPatchFile:[[fbox URLs] objectAtIndex:0]];
         }
     }];
@@ -133,7 +133,7 @@ static mbFlipWindow* _flipper;
 - (IBAction)btnSelectOriginal:(id)sender {
     NSOpenPanel *fbox = [NSOpenPanel openPanel];
     [fbox beginSheetModalForWindow:self completionHandler:^(NSInteger result) {
-        if(result == NSOKButton){
+        if(result == NSModalResponseOK){
             [self setTargetFile:[[fbox URLs] objectAtIndex:0]];
         }
     }];
@@ -145,7 +145,7 @@ static mbFlipWindow* _flipper;
 		[fbox setAllowedFileTypes:[NSArray arrayWithObject:romFormat]];
 	}
     [fbox beginSheetModalForWindow:self completionHandler:^(NSInteger result) {
-        if(result == NSOKButton){
+        if(result == NSModalResponseOK){
             NSString* selfile = [[fbox URL] path];
             [txtOutputPath setStringValue:selfile];
         }
@@ -155,23 +155,23 @@ static mbFlipWindow* _flipper;
 + (MPPatchFormat)detectPatchFormat:(NSString*)patchPath{
 	//I'm just going to look at the file extensions for now.
 	//In the future, I might wish to actually look at the contents of the file.
-    NSString* lowerPath = [patchPath lowercaseString];
-	if([lowerPath hasSuffix:@".ups"]){
+    NSString* lowerPath = [patchPath pathExtension].lowercaseString;
+	if([lowerPath hasSuffix:@"ups"]){
 		return MPPatchFormatUPS;
 	}
-	else if([lowerPath hasSuffix:@".ips"]){
+	else if([lowerPath hasSuffix:@"ips"]){
 		return MPPatchFormatIPS;
 	}
-	else if([lowerPath hasSuffix:@".ppf"]){
+	else if([lowerPath hasSuffix:@"ppf"]){
 		return MPPatchFormatPPF;
 	}
-	else if([lowerPath hasSuffix:@".dat"] || [lowerPath hasSuffix:@"delta"]){
+	else if([lowerPath hasSuffix:@"dat"] || [patchPath.lowercaseString hasSuffix:@"delta"]){
 		return MPPatchFormatXDelta;
 	}
-    else if([lowerPath hasSuffix:@".bdf"] || [lowerPath hasSuffix:@".bsdiff"]){
+    else if([lowerPath hasSuffix:@"bdf"] || [lowerPath hasSuffix:@"bsdiff"]){
         return MPPatchFormatBSDiff;
     }
-    else if([lowerPath hasSuffix:@".bps"]){
+    else if([lowerPath hasSuffix:@"bps"]){
         return MPPatchFormatBPS;
     }
 	return MPPatchFormatUnknown;
@@ -181,10 +181,9 @@ static mbFlipWindow* _flipper;
 	NSString* retval = nil;
 	if(currentFormat == MPPatchFormatUPS){
 		UPS ups; //UPS Patcher
-		bool result = ups.apply([sourceFile cStringUsingEncoding:[NSString defaultCStringEncoding]], [destFile cStringUsingEncoding:[NSString defaultCStringEncoding]], [patchPath cStringUsingEncoding:[NSString defaultCStringEncoding]]);
+		bool result = ups.apply([sourceFile fileSystemRepresentation], [destFile fileSystemRepresentation], [patchPath fileSystemRepresentation]);
 		if(result == false){
-			retval = [NSString stringWithCString:ups.error encoding:NSASCIIStringEncoding];
-			[retval retain];
+			retval = @(ups.error);
 		}
 	}
 	else if(currentFormat == MPPatchFormatIPS){

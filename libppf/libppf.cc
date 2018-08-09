@@ -45,7 +45,8 @@ namespace lppf {
    int LibPPF::loadPatch(string filename) {
       FILE *file;
       unsigned char buf[256];
-      int chunkSize, offsetSize, size;
+      int chunkSize, offsetSize;
+      size_t size;
 
       // Save filename
       ppfName = string(filename);

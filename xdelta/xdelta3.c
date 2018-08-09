@@ -1541,10 +1541,10 @@ xd3_round_blksize (usize_t sz, usize_t blksz)
 #define A32_DO8(buf,i)  A32_DO4(buf,i); A32_DO4(buf,i+4);
 #define A32_DO16(buf)   A32_DO8(buf,0); A32_DO8(buf,8);
 
-static unsigned long adler32 (unsigned long adler, const uint8_t *buf, usize_t len)
+static unsigned int adler32 (unsigned long adler, const uint8_t *buf, usize_t len)
 {
-    unsigned long s1 = adler & 0xffff;
-    unsigned long s2 = (adler >> 16) & 0xffff;
+    unsigned int s1 = adler & 0xffff;
+    unsigned int s2 = (adler >> 16) & 0xffff;
     int k;
 
     while (len > 0)

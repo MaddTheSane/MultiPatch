@@ -30,6 +30,7 @@ char* qstrlower(char *s) {
     if(quoted == false && *s >= 'A' && *s <= 'Z') *s += 0x20;
     s++;
   }
+  return s;
 }
 
 char* qstrupper(char *s) {
@@ -40,11 +41,12 @@ char* qstrupper(char *s) {
     if(quoted == false && *s >= 'a' && *s <= 'z') *s -= 0x20;
     s++;
   }
+  return s;
 }
 
 char* strtr(char *dest, const char *before, const char *after) {
   if(!dest || !before || !after) return dest;
-  int sl = strlen(dest), bsl = strlen(before), asl = strlen(after);
+  size_t sl = strlen(dest), bsl = strlen(before), asl = strlen(after);
 
   if(bsl != asl || bsl == 0) return dest;  //patterns must be the same length for 1:1 replace
   for(unsigned i = 0; i < sl; i++) {
