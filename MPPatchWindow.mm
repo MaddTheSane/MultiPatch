@@ -68,7 +68,6 @@ static mbFlipWindow* _flipper;
 			}
 			else{
 				NSRunAlertPanel(@"Patching failed", errMsg, @"Okay", nil, nil);
-				[errMsg release];
 				errMsg = nil;
 			}
 		}
@@ -123,11 +122,7 @@ static mbFlipWindow* _flipper;
 -(void)setTargetFile:(NSURL*)target{
     NSString* selfile = [target path];
     [txtRomPath setStringValue:selfile];
-    if(romFormat != nil){
-        [romFormat release];
-    }
     romFormat = [selfile pathExtension];
-    [romFormat retain];
 }
 
 - (IBAction)btnSelectOriginal:(id)sender {

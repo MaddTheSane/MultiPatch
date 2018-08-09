@@ -161,7 +161,6 @@
 			}
 			else{
 				NSRunAlertPanel(@"Patch creation failed.", errMsg, @"Okay", nil, nil);
-				[errMsg release];
 				errMsg = nil;
 			}
 		}
@@ -187,7 +186,6 @@
 		bool result = ups.create([origFile cStringUsingEncoding:[NSString defaultCStringEncoding]], [modFile cStringUsingEncoding:[NSString defaultCStringEncoding]], [createFile cStringUsingEncoding:[NSString defaultCStringEncoding]]);
 		if(result == false){
 			retval = [NSString stringWithCString:ups.error encoding:NSASCIIStringEncoding];
-			[retval retain];
 		}
 	}
 	else if(currentFormat == MPPatchFormatIPS){
