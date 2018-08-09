@@ -11,42 +11,6 @@ NSErrorDomain const XDeltaErrorDomain = @"com.sappharad.MultiPatch.xdelta.error"
 static int code (BOOL encode, FILE* InFile, FILE* SrcFile, FILE* OutFile, int BufSize);
 
 @implementation XDeltaAdapter
-+(NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{
-	FILE*  InFile = fopen([patch cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
-	FILE*  SrcFile = fopen([input cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
-	FILE* OutFile = fopen([output cStringUsingEncoding:[NSString defaultCStringEncoding]], "wb");
-	int r = code (0, InFile, SrcFile, OutFile, 0x1000);
-	
-	fclose(OutFile);
-	fclose(SrcFile);
-	fclose(InFile);
-	
-	if (r != 0) {
-        if(r == -17712){
-            return @"Invalid input. This typically means that the file you selected to patch is not the file your patch is intended for.";
-        }
-		return [NSString stringWithFormat:@"Decode error: %d",r];
-	}
-	
-	return nil;
-}
-
-+(NSString*)createPatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
-    FILE* oldFile = fopen([orig cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
-	FILE* newFile = fopen([modify cStringUsingEncoding:[NSString defaultCStringEncoding]], "rb");
-	FILE* deltaFile = fopen([output cStringUsingEncoding:[NSString defaultCStringEncoding]], "wb");
-	int r = code (1, newFile, oldFile, deltaFile, 0x1000);
-	
-	fclose(deltaFile);
-	fclose(oldFile);
-	fclose(newFile);
-	
-	if (r != 0) {
-		return [NSString stringWithFormat:@"Encode error: %d",r];
-	}
-	
-	return nil;
-}
 
 int code (BOOL encode, FILE* InFile, FILE* SrcFile, FILE* OutFile, int BufSize)
 {

@@ -57,33 +57,6 @@ NSErrorDomain const PPFAdaptorErrorDomain = @"com.sappharad.MultiPatch.ppf.error
 	}
 }
 
-+(NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{
-	lppf::LibPPF ppf;
-	int error;
-	
-	if ((error = ppf.loadPatch([patch fileSystemRepresentation])) != 0) {
-		return [self errorMsg:error];
-	}
-	
-	if(![input isEqualToString:output]){
-		NSFileManager* fileMan = [NSFileManager defaultManager];
-        NSError* error;
-        if(![fileMan copyItemAtPath:input toPath:output error:&error])
-		{
-			return @"Unable to open original file or write to output file.";
-		}
-	}
-	
-	// Apply PPF data to file
-	if ((error = ppf.applyPatch([output fileSystemRepresentation], false)) != 0) {
-		return [self errorMsg:error];
-	}
-	return nil; //Success!
-}
-
-+(NSString*)createPatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
-    return @"Oops, PPF creation not supported."; //Success! :-(
-}
 + (BOOL)applyPatchAtURL:(NSURL *)patch toFileURL:(NSURL *)input destination:(NSURL *)output error:(NSError **)outError {
 	lppf::LibPPF ppf;
 	int error;
@@ -115,7 +88,7 @@ NSErrorDomain const PPFAdaptorErrorDomain = @"com.sappharad.MultiPatch.ppf.error
 
 + (BOOL)createPatchUsingSourceURL:(NSURL *)orig modifiedFileURL:(NSURL *)modify destination:(NSURL *)output error:(NSError **)error {
 	if (error) {
-		*error = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:nil];
+		*error = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:@{NSLocalizedDescriptionKey:@"Oops, PPF creation not supported."}];
 	}
 	
 	return NO;

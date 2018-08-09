@@ -84,6 +84,7 @@
 		55E18F54211CB0D5009A6FE9 /* gzip.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gzip.hpp; sourceTree = "<group>"; };
 		55E18F55211CB0D5009A6FE9 /* memory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = memory.hpp; sourceTree = "<group>"; };
 		55E18F57211CDBFA009A6FE9 /* libbz2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.tbd; path = usr/lib/libbz2.tbd; sourceTree = SDKROOT; };
+		55E18F59211CDFA9009A6FE9 /* platform.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = platform.hpp; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E0351C10E9D8B570043AC3E /* MPPatchWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPatchWindow.m; sourceTree = "<group>"; };
 		9E0351C20E9D8B570043AC3E /* MPPatchWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPatchWindow.h; sourceTree = "<group>"; };
@@ -321,6 +322,7 @@
 				9E8884D216756599008AFDC1 /* bps */,
 				55D2278D211B93BD00AAECBB /* crc32.hpp */,
 				55D2278B211B93BD00AAECBB /* file.hpp */,
+				55E18F59211CDFA9009A6FE9 /* platform.hpp */,
 				55E18F4B211CB0C9009A6FE9 /* sha256.hpp */,
 				55D2278C211B93BD00AAECBB /* filemap.hpp */,
 				55D2278A211B93BD00AAECBB /* string.hpp */,

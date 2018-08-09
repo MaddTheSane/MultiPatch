@@ -5,3 +5,11 @@
 #ifdef __OBJC__
     #import <Cocoa/Cocoa.h>
 #endif
+
+#ifdef __cplusplus
+	#include "nall/algorithm.hpp"
+	#include "nall/crc32.hpp"
+	#include "nall/file.hpp"
+	#include "nall/sort.hpp"
+	#include "nall/stdint.hpp"
+#endif

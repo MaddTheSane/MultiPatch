@@ -26,6 +26,4 @@ typedef NS_ERROR_ENUM(PPFAdaptorErrorDomain, PPFAdaptorError) {
 
 @interface PPFAdapter : NSObject <MPPatchAdapter>
 +(NSString*)errorMsg:(int)error;
-+(NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output;
-+(NSString*)createPatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output;
 @end

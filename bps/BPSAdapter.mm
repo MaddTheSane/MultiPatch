@@ -58,41 +58,6 @@ NSErrorDomain const BPSAdapterErrorDomain = @"com.sappharad.MultiPatch.bps.error
     return retval;
 }
 
-+(NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output{
-    NSString* retval = nil;
-    nall::bpspatch bps;
-    bps.modify([patch fileSystemRepresentation]);
-    bps.source([input fileSystemRepresentation]);
-    bps.target([output fileSystemRepresentation]);
-    nall::bpspatch::result bpsResult = bps.apply();
-    if(bpsResult != nall::bpspatch::result::success){
-        retval = [BPSAdapter TranslateBPSresult:bpsResult];
-    }
-    return retval;
-}
-
-+(NSString*)createPatchLinear:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
-    NSString* retval = nil;
-    nall::bpslinear bps;
-    bps.source([orig fileSystemRepresentation]);
-    bps.target([modify fileSystemRepresentation]);
-    if(bps.create([output fileSystemRepresentation])==false){
-        retval = @"BPS patch creation failed due to an unknown error!";
-    }
-    return nil;
-}
-
-+(NSString*)createPatchDelta:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
-    NSString* retval = nil;
-    nall::bpsdelta bps;
-    bps.source([orig fileSystemRepresentation]);
-    bps.target([modify fileSystemRepresentation]);
-    if(bps.create([output fileSystemRepresentation])==false){
-        retval = @"BPS patch creation failed due to an unknown error!";
-    }
-    return nil;
-}
-
 + (BOOL)applyPatchAtURL:(NSURL *)patch toFileURL:(NSURL *)input destination:(NSURL *)output error:(NSError **)error
 {
 	nall::bpspatch bps;
