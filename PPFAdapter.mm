@@ -84,7 +84,7 @@ NSErrorDomain const PPFAdaptorErrorDomain = @"com.sappharad.MultiPatch.ppf.error
 +(NSString*)createPatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output{
     return @"Oops, PPF creation not supported."; //Success! :-(
 }
-+ (BOOL)applyPatch:(NSURL *)patch toFile:(NSURL *)input andCreate:(NSURL *)output error:(NSError **)outError {
++ (BOOL)applyPatchAtURL:(NSURL *)patch toFileURL:(NSURL *)input destination:(NSURL *)output error:(NSError **)outError {
 	lppf::LibPPF ppf;
 	int error;
 	
@@ -113,7 +113,7 @@ NSErrorDomain const PPFAdaptorErrorDomain = @"com.sappharad.MultiPatch.ppf.error
 	return YES; //Success!
 }
 
-+ (BOOL)createPatch:(NSURL *)orig withMod:(NSURL *)modify andCreate:(NSURL *)output error:(NSError **)error {
++ (BOOL)createPatchUsingSourceURL:(NSURL *)orig modifiedFileURL:(NSURL *)modify destination:(NSURL *)output error:(NSError **)error {
 	if (error) {
 		*error = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:nil];
 	}

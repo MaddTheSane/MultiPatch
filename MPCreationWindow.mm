@@ -44,7 +44,7 @@
 - (IBAction)btnPickOrig:(id)sender {
     NSOpenPanel *fbox = [NSOpenPanel openPanel];
     [fbox beginSheetModalForWindow:self completionHandler:^(NSInteger result) {
-        if(result == NSOKButton){
+        if(result == NSModalResponseOK){
             [self setOriginalFile:[[fbox URLs] objectAtIndex:0]];
         }
     }];
@@ -58,7 +58,7 @@
 - (IBAction)btnPickModified:(id)sender{
     NSOpenPanel *fbox = [NSOpenPanel openPanel];
     [fbox beginSheetModalForWindow:self completionHandler:^(NSInteger result) {
-        if(result == NSOKButton){
+        if(result == NSModalResponseOK){
             [self setModifiedFile:[[fbox URLs] objectAtIndex:0]];
         }
     }];
@@ -82,27 +82,27 @@
 }
 
 - (void)selOutputPanelEnd:(NSSavePanel*)panel returnCode:(NSInteger)returnCode{
-	if(returnCode == NSOKButton){
+	if(returnCode == NSModalResponseOK){
 		NSString* selfile = [[panel URL] path];
         bool bps_delta = false;
         if([[ddFormats titleOfSelectedItem] hasPrefix:@"UPS"] && ![selfile hasSuffix:@".ups"]){
-            selfile = [selfile stringByAppendingString:@".ups"];
+            selfile = [selfile stringByAppendingPathExtension:@"ups"];
         }
         else if([[ddFormats titleOfSelectedItem] hasPrefix:@"Linear BPS"] && ![selfile hasSuffix:@".bps"]){
-            selfile = [selfile stringByAppendingString:@".bps"];
+            selfile = [selfile stringByAppendingPathExtension:@"bps"];
         }
         else if([[ddFormats titleOfSelectedItem] hasPrefix:@"Delta BPS"] && ![selfile hasSuffix:@".bps"]){
-            selfile = [selfile stringByAppendingString:@".bps"];
+            selfile = [selfile stringByAppendingPathExtension:@"bps"];
             bps_delta = true;
         }
         else if([[ddFormats titleOfSelectedItem] hasPrefix:@"IPS"] && ![selfile hasSuffix:@".ips"]){
-            selfile = [selfile stringByAppendingString:@".ips"];
+            selfile = [selfile stringByAppendingPathExtension:@"ips"];
         }
         else if([[ddFormats titleOfSelectedItem] hasPrefix:@"XDelta"] && ![selfile hasSuffix:@".delta"]){
-            selfile = [selfile stringByAppendingString:@".delta"];
+            selfile = [selfile stringByAppendingPathExtension:@"delta"];
         }
         else if([[ddFormats titleOfSelectedItem] hasPrefix:@"BSDiff"] && ![selfile hasSuffix:@".bdf"]){
-            selfile = [selfile stringByAppendingString:@".bdf"];
+            selfile = [selfile stringByAppendingPathExtension:@"bdf"];
         }
         [txtPatchFile setStringValue:selfile];
         currentFormat = [MPPatchWindow detectPatchFormat:selfile];

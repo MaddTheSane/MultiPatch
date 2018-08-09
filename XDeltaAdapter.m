@@ -172,7 +172,7 @@ int code (BOOL encode, FILE* InFile, FILE* SrcFile, FILE* OutFile, int BufSize)
     return 0;
 }
 
-+ (BOOL)applyPatch:(NSURL *)patch toFile:(NSURL *)input andCreate:(NSURL *)output error:(NSError **)error { 
++ (BOOL)applyPatchAtURL:(NSURL *)patch toFileURL:(NSURL *)input destination:(NSURL *)output error:(NSError **)error { 
 	FILE*  InFile = fopen([patch fileSystemRepresentation], "rb");
 	FILE*  SrcFile = fopen([input fileSystemRepresentation], "rb");
 	FILE* OutFile = fopen([output fileSystemRepresentation], "wb");
@@ -196,7 +196,7 @@ int code (BOOL encode, FILE* InFile, FILE* SrcFile, FILE* OutFile, int BufSize)
 	return YES;
 }
 
-+ (BOOL)createPatch:(NSURL *)orig withMod:(NSURL *)modify andCreate:(NSURL *)output error:(NSError **)error { 
++ (BOOL)createPatchUsingSourceURL:(NSURL *)orig modifiedFileURL:(NSURL *)modify destination:(NSURL *)output error:(NSError **)error { 
 	FILE* oldFile = fopen([orig fileSystemRepresentation], "rb");
 	FILE* newFile = fopen([modify fileSystemRepresentation], "rb");
 	FILE* deltaFile = fopen([output fileSystemRepresentation], "wb");

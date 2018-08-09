@@ -33,7 +33,7 @@ extern int bsdiff_perform(char* oldfile, char* newfile, char* patchfile);
 	
     return nil;
 }
-+ (BOOL)applyPatch:(NSURL *)patch toFile:(NSURL *)input andCreate:(NSURL *)output error:(NSError **)error { 
++ (BOOL)applyPatchAtURL:(NSURL *)patch toFileURL:(NSURL *)input destination:(NSURL *)output error:(NSError **)error { 
 	int err = bspatch_perform((char*)[input fileSystemRepresentation], (char*)[output fileSystemRepresentation], (char*)[patch fileSystemRepresentation]);
 	if(err > 0){
 		if (error) {
@@ -51,7 +51,7 @@ extern int bsdiff_perform(char* oldfile, char* newfile, char* patchfile);
 	return YES;
 }
 
-+ (BOOL)createPatch:(NSURL *)orig withMod:(NSURL *)modify andCreate:(NSURL *)output error:(NSError **)error { 
++ (BOOL)createPatchUsingSourceURL:(NSURL *)orig modifiedFileURL:(NSURL *)modify destination:(NSURL *)output error:(NSError **)error { 
 	int err = bsdiff_perform((char*)[orig fileSystemRepresentation], (char*)[modify fileSystemRepresentation], (char*)[output fileSystemRepresentation]);
 	if(err > 0){
 		/*

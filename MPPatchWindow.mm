@@ -177,6 +177,49 @@ static mbFlipWindow* _flipper;
 	return MPPatchFormatUnknown;
 }
 
+- (BOOL)applyPatchAtURL:(NSURL*)patchPath source:(NSURL*)sourceFile destination:(NSURL*)destFile error:(NSError**)outError
+{
+	BOOL retval = NO;
+	switch (currentFormat) {
+		case MPPatchFormatUPS:
+		{
+			UPS ups; //UPS Patcher
+			bool result = ups.apply([sourceFile fileSystemRepresentation], [destFile fileSystemRepresentation], [patchPath fileSystemRepresentation]);
+			if (!result) {
+				if (outError) {
+					*outError = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:@(ups.error)}];
+				}
+				return NO;
+			}
+		}
+			break;
+			
+		case MPPatchFormatIPS:
+			retval = [IPSAdapter applyPatchAtURL:patchPath toFileURL:sourceFile destination:destFile error:outError];
+			break;
+			
+		case MPPatchFormatXDelta:
+			retval = [XDeltaAdapter applyPatchAtURL:patchPath toFileURL:sourceFile destination:destFile error:outError];
+			break;
+			
+		case MPPatchFormatPPF:
+			retval = [PPFAdapter applyPatchAtURL:patchPath toFileURL:sourceFile destination:destFile error:outError];
+			break;
+			
+		case MPPatchFormatBSDiff:
+			retval = [BSdiffAdapter applyPatchAtURL:patchPath toFileURL:sourceFile destination:destFile error:outError];
+			break;
+			
+		case MPPatchFormatBPS:
+			retval = [BPSAdapter applyPatchAtURL:patchPath toFileURL:sourceFile destination:destFile error:outError];
+			break;
+			
+		default:
+			break;
+	}
+	return retval;
+}
+
 - (NSString*)ApplyPatch:(NSString*)patchPath :(NSString*)sourceFile :(NSString*)destFile{
 	NSString* retval = nil;
 	if(currentFormat == MPPatchFormatUPS){

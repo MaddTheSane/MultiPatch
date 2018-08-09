@@ -37,7 +37,7 @@ NSErrorDomain const IPSAdapterErrorDomain = @"com.sappharad.MultiPatch.ips.error
 	
     return nil;
 }
-+ (BOOL)applyPatch:(NSURL *)patch toFile:(NSURL *)input andCreate:(NSURL *)output error:(NSError **)error {
++ (BOOL)applyPatchAtURL:(NSURL *)patch toFileURL:(NSURL *)input destination:(NSURL *)output error:(NSError **)error {
 	if(![input isEqual:output]){
 		NSFileManager* fileMan = [NSFileManager defaultManager];
 		if(![fileMan copyItemAtURL:input toURL:output error:error])
@@ -59,7 +59,7 @@ NSErrorDomain const IPSAdapterErrorDomain = @"com.sappharad.MultiPatch.ips.error
 	return YES;
 }
 
-+ (BOOL)createPatch:(NSURL *)orig withMod:(NSURL *)modify andCreate:(NSURL *)output error:(NSError **)error {
++ (BOOL)createPatchUsingSourceURL:(NSURL *)orig modifiedFileURL:(NSURL *)modify destination:(NSURL *)output error:(NSError **)error {
 	const char* listOfOne[1];
 	listOfOne[0] = (const char*)[orig fileSystemRepresentation];
 	int err = create_patch([output fileSystemRepresentation], 1, (const char**)listOfOne, [modify fileSystemRepresentation]);

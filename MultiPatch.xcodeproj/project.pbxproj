@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
+		55E18F4A211CA6B2009A6FE9 /* MPUPSAdapter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 55E18F49211CA6B2009A6FE9 /* MPUPSAdapter.mm */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -69,7 +70,9 @@
 		55D2278B211B93BD00AAECBB /* file.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = file.hpp; sourceTree = "<group>"; };
 		55D2278C211B93BD00AAECBB /* filemap.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = filemap.hpp; sourceTree = "<group>"; };
 		55D2278D211B93BD00AAECBB /* crc32.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = crc32.hpp; sourceTree = "<group>"; };
-		55D2278E211B97E600AAECBB /* MPPatchAdaptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPatchAdaptor.h; sourceTree = "<group>"; };
+		55D2278E211B97E600AAECBB /* MPPatchAdapter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPatchAdapter.h; sourceTree = "<group>"; };
+		55E18F48211CA6B2009A6FE9 /* MPUPSAdapter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPUPSAdapter.h; sourceTree = "<group>"; };
+		55E18F49211CA6B2009A6FE9 /* MPUPSAdapter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MPUPSAdapter.mm; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E0351C10E9D8B570043AC3E /* MPPatchWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MPPatchWindow.mm; sourceTree = "<group>"; };
 		9E0351C20E9D8B570043AC3E /* MPPatchWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPatchWindow.h; sourceTree = "<group>"; };
@@ -159,7 +162,9 @@
 				9EEA30EE11E0418A005B6996 /* xdelta */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
-				55D2278E211B97E600AAECBB /* MPPatchAdaptor.h */,
+				55D2278E211B97E600AAECBB /* MPPatchAdapter.h */,
+				55E18F48211CA6B2009A6FE9 /* MPUPSAdapter.h */,
+				55E18F49211CA6B2009A6FE9 /* MPUPSAdapter.mm */,
 				9E0351C20E9D8B570043AC3E /* MPPatchWindow.h */,
 				9E0351C10E9D8B570043AC3E /* MPPatchWindow.mm */,
 				9E17AB9D120F9E9800BA4827 /* MPCreationWindow.h */,
@@ -426,6 +431,7 @@
 				9EFA6CE611E153B500CBE19A /* XDeltaAdapter.m in Sources */,
 				9EFA6D2E11E161D000CBE19A /* IPSAdapter.m in Sources */,
 				9E28E08611E2BE330002DE08 /* libppf.cc in Sources */,
+				55E18F4A211CA6B2009A6FE9 /* MPUPSAdapter.mm in Sources */,
 				9E28E08811E2BE330002DE08 /* ppf.cc in Sources */,
 				9E28E08D11E2BF5E0002DE08 /* PPFAdapter.mm in Sources */,
 				9E17AB9F120F9E9800BA4827 /* MPCreationWindow.mm in Sources */,

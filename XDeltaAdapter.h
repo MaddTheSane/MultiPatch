@@ -7,11 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MPPatchAdaptor.h"
+#import "MPPatchAdapter.h"
 
 extern NSErrorDomain const XDeltaErrorDomain;
 
-@interface XDeltaAdapter : NSObject <MPPatchAdaptor>
+@interface XDeltaAdapter : NSObject <MPPatchAdapter>
 +(NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output;
 +(NSString*)createPatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output;
 @end

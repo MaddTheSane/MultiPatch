@@ -4,7 +4,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MPPatchAdaptor.h"
+#import "MPPatchAdapter.h"
 
 extern NSErrorDomain const PPFAdaptorErrorDomain;
 typedef NS_ERROR_ENUM(PPFAdaptorErrorDomain, PPFAdaptorError) {
@@ -24,7 +24,7 @@ typedef NS_ERROR_ENUM(PPFAdaptorErrorDomain, PPFAdaptorError) {
 	PPFAdaptorErrorFileWrite = 0x15
 };
 
-@interface PPFAdapter : NSObject <MPPatchAdaptor>
+@interface PPFAdapter : NSObject <MPPatchAdapter>
 +(NSString*)errorMsg:(int)error;
 +(NSString*)applyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output;
 +(NSString*)createPatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output;

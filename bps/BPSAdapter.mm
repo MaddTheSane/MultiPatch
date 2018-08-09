@@ -8,6 +8,8 @@
 #import "linear.hpp"
 #import "delta.hpp"
 
+NSErrorDomain const BPSAdapterErrorDomain = @"com.sappharad.MultiPatch.bps.error";
+
 @implementation BPSAdapter
 + (NSString*)TranslateBPSresult:(nall::bpspatch::result)result{
     NSString* retval = nil;
@@ -74,5 +76,55 @@
         retval = @"BPS patch creation failed due to an unknown error!";
     }
     return nil;
+}
+
++ (BOOL)applyPatchAtURL:(NSURL *)patch toFileURL:(NSURL *)input destination:(NSURL *)output error:(NSError **)error
+{
+	nall::bpspatch bps;
+	bps.modify([patch fileSystemRepresentation]);
+	bps.source([input fileSystemRepresentation]);
+	bps.target([output fileSystemRepresentation]);
+	auto bpsResult = bps.apply();
+	if (bpsResult != nall::bpspatch::result::success) {
+		if (error) {
+			*error = [NSError errorWithDomain:BPSAdapterErrorDomain code:bpsResult userInfo:nil];
+		}
+		return NO;
+	}
+	return YES;
+}
+
++ (BOOL)createPatchUsingSourceURL:(NSURL *)orig modifiedFileURL:(NSURL *)modify destination:(NSURL *)output error:(NSError **)error
+{
+	return [self createLinearPatchUsingSourceURL:orig modifiedFileURL:modify destination:output error:error];
+}
+
+
++ (BOOL)createLinearPatchUsingSourceURL:(NSURL *)orig modifiedFileURL:(NSURL *)modify destination:(NSURL *)output error:(NSError **)error
+{
+	nall::bpslinear bps;
+	bps.source([orig fileSystemRepresentation]);
+	bps.target([modify fileSystemRepresentation]);
+	if(bps.create([output fileSystemRepresentation])==false){
+		if (error) {
+			*error = [NSError errorWithDomain:BPSAdapterErrorDomain code:nall::bpspatch::result::unknown userInfo:nil];
+		}
+		return NO;
+	}
+	return YES;
+}
+
++ (BOOL)createDeltaPatchUsingSourceURL:(NSURL *)orig modifiedFileURL:(NSURL *)modify destination:(NSURL *)output error:(NSError **)error
+{
+	nall::bpsdelta bps;
+	bps.source([orig fileSystemRepresentation]);
+	bps.target([modify fileSystemRepresentation]);
+	if(bps.create([output fileSystemRepresentation])==false){
+		if (error) {
+			*error = [NSError errorWithDomain:BPSAdapterErrorDomain code:nall::bpspatch::result::unknown userInfo:nil];
+		}
+		return NO;
+	}
+	return YES;
 }
 @end
