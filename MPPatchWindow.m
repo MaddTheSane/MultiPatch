@@ -1,10 +1,10 @@
 #import "MPPatchWindow.h"
-#include "libups.hpp"
 #include "XDeltaAdapter.h"
 #include "IPSAdapter.h"
 #include "PPFAdapter.h"
 #include "BSdiffAdapter.h"
 #include "BPSAdapter.h"
+#include "MPUPSAdapter.h"
 
 @implementation MPPatchWindow
 static mbFlipWindow* _flipper;
@@ -30,12 +30,13 @@ static mbFlipWindow* _flipper;
 }
 
 -(void)onOrderFront{
+	__weak MPPatchWindow *weakSelf = self;
     txtRomPath.acceptFileDrop = ^BOOL(NSURL * target) {
-        [self setTargetFile:target];
+        [weakSelf setTargetFile:target];
         return YES;
     };
     txtPatchPath.acceptFileDrop = ^BOOL(NSURL * target) {
-        [self setPatchFile:target];
+        [weakSelf setPatchFile:target];
         return YES;
     };
 }
@@ -55,28 +56,42 @@ static mbFlipWindow* _flipper;
 	if([fileManager fileExistsAtPath:patchPath]){
 		if([romPath length] > 0 && [outputPath length] > 0 && [patchPath length] > 0){
 			[lblStatus setStringValue:@"Now patching..."];
-            [NSApp beginSheet:pnlPatching modalForWindow:self modalDelegate:nil didEndSelector:nil contextInfo:nil]; //Make a sheet
+			[self beginSheet:pnlPatching completionHandler:^(NSModalResponse returnCode) {
+				//Do nothing
+			}];
 			[barProgress setUsesThreadedAnimation:YES]; //Make sure it animates.
 			[barProgress startAnimation:self];
-			NSString* errMsg = [self ApplyPatch:patchPath :romPath :outputPath];
+			NSError *err;
+			NSURL *romURL = [NSURL fileURLWithPath:romPath];
+			NSURL *outputURL = [NSURL fileURLWithPath:outputPath];
+			NSURL *patchURL = [NSURL fileURLWithPath:patchPath];
+			BOOL success = [self applyPatchAtURL:patchURL source:romURL destination:outputURL error:&err];
 			[barProgress stopAnimation:self];
-			[NSApp endSheet:pnlPatching]; //Tell the sheet we're done.
+			[self endSheet:pnlPatching]; //Tell the sheet we're done.
 			[pnlPatching orderOut:self]; //Lets hide the sheet.
 			
-			if(errMsg == nil){
-				NSRunAlertPanel(@"Finished!",@"The file was patched successfully.",@"Okay",nil,nil);
+			if(success){
+				NSAlert *alert = [[NSAlert alloc] init];
+				alert.messageText = @"Finished!";
+				alert.informativeText = @"The file was patched successfully.";
+				[alert runModal];
 			}
 			else{
-				NSRunAlertPanel(@"Patching failed", errMsg, @"Okay", nil, nil);
-				errMsg = nil;
+				[NSApp presentError:err];
 			}
 		}
 		else{
-			NSRunAlertPanel(@"Not ready yet",@"All of the files above must be chosen before patching is possible.",@"Okay",nil,nil);
+			NSAlert *alert = [[NSAlert alloc] init];
+			alert.messageText = @"Not ready yet";
+			alert.informativeText = @"All of the files above must be chosen before patching is possible.";
+			[alert runModal];
 		}
 	}
 	else{
-		NSRunAlertPanel(@"Patch not found",@"The patch file selected does not exist.\nWhy did you do that?",@"Okay",nil,nil);	
+		NSAlert *alert = [[NSAlert alloc] init];
+		alert.messageText = @"Patch not found";
+		alert.informativeText = @"The patch file selected does not exist.\nWhy did you do that?";
+		[alert runModal];
 	}
 }
 
@@ -112,6 +127,7 @@ static mbFlipWindow* _flipper;
 
 - (IBAction)btnSelectPatch:(id)sender{
 	NSOpenPanel *fbox = [NSOpenPanel openPanel];
+	fbox.allowedFileTypes = @[@"ups", @"ips", @"ppf", @"dat", @"delta", @"bdf", @"bsdiff", @"bps"];
     [fbox beginSheetModalForWindow:self completionHandler:^(NSInteger result) {
         if(result == NSModalResponseOK){
             [self setPatchFile:[[fbox URLs] objectAtIndex:0]];
@@ -129,7 +145,7 @@ static mbFlipWindow* _flipper;
     NSOpenPanel *fbox = [NSOpenPanel openPanel];
     [fbox beginSheetModalForWindow:self completionHandler:^(NSInteger result) {
         if(result == NSModalResponseOK){
-            [self setTargetFile:[[fbox URLs] objectAtIndex:0]];
+            [self setTargetFile:fbox.URL];
         }
     }];
 }
@@ -142,7 +158,7 @@ static mbFlipWindow* _flipper;
     [fbox beginSheetModalForWindow:self completionHandler:^(NSInteger result) {
         if(result == NSModalResponseOK){
             NSString* selfile = [[fbox URL] path];
-            [txtOutputPath setStringValue:selfile];
+			[self->txtOutputPath setStringValue:selfile];
         }
     }];
 }
@@ -177,16 +193,7 @@ static mbFlipWindow* _flipper;
 	BOOL retval = NO;
 	switch (currentFormat) {
 		case MPPatchFormatUPS:
-		{
-			UPS ups; //UPS Patcher
-			bool result = ups.apply([sourceFile fileSystemRepresentation], [destFile fileSystemRepresentation], [patchPath fileSystemRepresentation]);
-			if (!result) {
-				if (outError) {
-					*outError = [NSError errorWithDomain:NSCocoaErrorDomain code:1 userInfo:@{NSLocalizedDescriptionKey:@(ups.error)}];
-				}
-				return NO;
-			}
-		}
+			retval = [MPUPSAdapter applyPatchAtURL:patchPath toFileURL:sourceFile destination:destFile error:outError];
 			break;
 			
 		case MPPatchFormatIPS:
@@ -210,35 +217,11 @@ static mbFlipWindow* _flipper;
 			break;
 			
 		default:
+			if (outError) {
+				*outError = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFeatureUnsupportedError userInfo:nil];
+			}
 			break;
 	}
-	return retval;
-}
-
-- (NSString*)ApplyPatch:(NSString*)patchPath :(NSString*)sourceFile :(NSString*)destFile{
-	NSString* retval = nil;
-	if(currentFormat == MPPatchFormatUPS){
-		UPS ups; //UPS Patcher
-		bool result = ups.apply([sourceFile fileSystemRepresentation], [destFile fileSystemRepresentation], [patchPath fileSystemRepresentation]);
-		if(result == false){
-			retval = @(ups.error);
-		}
-	}
-	else if(currentFormat == MPPatchFormatIPS){
-		retval = [IPSAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
-	}
-	else if(currentFormat == MPPatchFormatXDelta){
-		retval = [XDeltaAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
-	}
-	else if(currentFormat == MPPatchFormatPPF){
-		retval = [PPFAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
-	}
-    else if(currentFormat == MPPatchFormatBSDiff){
-        retval = [BSdiffAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
-    }
-    else if(currentFormat == MPPatchFormatBPS){
-        retval = [BPSAdapter applyPatch:patchPath toFile:sourceFile andCreate:destFile];
-    }
 	return retval;
 }
 

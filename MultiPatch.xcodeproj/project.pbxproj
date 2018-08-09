@@ -12,8 +12,8 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		9E0351C30E9D8B570043AC3E /* MPPatchWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9E0351C10E9D8B570043AC3E /* MPPatchWindow.mm */; };
-		9E17AB9F120F9E9800BA4827 /* MPCreationWindow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 9E17AB9E120F9E9800BA4827 /* MPCreationWindow.mm */; };
+		9E0351C30E9D8B570043AC3E /* MPPatchWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E0351C10E9D8B570043AC3E /* MPPatchWindow.m */; };
+		9E17AB9F120F9E9800BA4827 /* MPCreationWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E17AB9E120F9E9800BA4827 /* MPCreationWindow.m */; };
 		9E2701CC1C31C59000F50B1F /* mbFlipWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E2701CB1C31C59000F50B1F /* mbFlipWindow.m */; };
 		9E2701CE1C31C64200F50B1F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E2701CD1C31C64200F50B1F /* QuartzCore.framework */; };
 		9E28E08611E2BE330002DE08 /* libppf.cc in Sources */ = {isa = PBXBuildFile; fileRef = 9E28E08011E2BE330002DE08 /* libppf.cc */; };
@@ -83,10 +83,10 @@
 		55E18F54211CB0D5009A6FE9 /* gzip.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = gzip.hpp; sourceTree = "<group>"; };
 		55E18F55211CB0D5009A6FE9 /* memory.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = memory.hpp; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9E0351C10E9D8B570043AC3E /* MPPatchWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MPPatchWindow.mm; sourceTree = "<group>"; };
+		9E0351C10E9D8B570043AC3E /* MPPatchWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPPatchWindow.m; sourceTree = "<group>"; };
 		9E0351C20E9D8B570043AC3E /* MPPatchWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPPatchWindow.h; sourceTree = "<group>"; };
 		9E17AB9D120F9E9800BA4827 /* MPCreationWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MPCreationWindow.h; sourceTree = "<group>"; };
-		9E17AB9E120F9E9800BA4827 /* MPCreationWindow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MPCreationWindow.mm; sourceTree = "<group>"; };
+		9E17AB9E120F9E9800BA4827 /* MPCreationWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MPCreationWindow.m; sourceTree = "<group>"; };
 		9E1EE3BE11FE75E90081FDC2 /* uips.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = uips.c; sourceTree = "<group>"; };
 		9E2701C81C31C16B00F50B1F /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		9E2701CA1C31C59000F50B1F /* mbFlipWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mbFlipWindow.h; sourceTree = "<group>"; };
@@ -174,9 +174,9 @@
 				55E18F48211CA6B2009A6FE9 /* MPUPSAdapter.h */,
 				55E18F49211CA6B2009A6FE9 /* MPUPSAdapter.mm */,
 				9E0351C20E9D8B570043AC3E /* MPPatchWindow.h */,
-				9E0351C10E9D8B570043AC3E /* MPPatchWindow.mm */,
+				9E0351C10E9D8B570043AC3E /* MPPatchWindow.m */,
 				9E17AB9D120F9E9800BA4827 /* MPCreationWindow.h */,
-				9E17AB9E120F9E9800BA4827 /* MPCreationWindow.mm */,
+				9E17AB9E120F9E9800BA4827 /* MPCreationWindow.m */,
 				9E2701CA1C31C59000F50B1F /* mbFlipWindow.h */,
 				9E2701CB1C31C59000F50B1F /* mbFlipWindow.m */,
 				9EBBF6C81EA06D2C00EF26A3 /* MPFileTextField.h */,
@@ -184,8 +184,11 @@
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				9EEA30B511E03F75005B6996 /* Products */,
 			);
+			indentWidth = 4;
 			name = Mother3UPS;
 			sourceTree = "<group>";
+			tabWidth = 4;
+			usesTabs = 1;
 		};
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
@@ -450,7 +453,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
-				9E0351C30E9D8B570043AC3E /* MPPatchWindow.mm in Sources */,
+				9E0351C30E9D8B570043AC3E /* MPPatchWindow.m in Sources */,
 				9EEA30F111E041B8005B6996 /* xdelta3.c in Sources */,
 				9EFA6CE611E153B500CBE19A /* XDeltaAdapter.m in Sources */,
 				9EFA6D2E11E161D000CBE19A /* IPSAdapter.m in Sources */,
@@ -458,7 +461,7 @@
 				55E18F4A211CA6B2009A6FE9 /* MPUPSAdapter.mm in Sources */,
 				9E28E08811E2BE330002DE08 /* ppf.cc in Sources */,
 				9E28E08D11E2BF5E0002DE08 /* PPFAdapter.mm in Sources */,
-				9E17AB9F120F9E9800BA4827 /* MPCreationWindow.mm in Sources */,
+				9E17AB9F120F9E9800BA4827 /* MPCreationWindow.m in Sources */,
 				9ED6066E126D30DC004782CA /* bsdiff.c in Sources */,
 				9E2701CC1C31C59000F50B1F /* mbFlipWindow.m in Sources */,
 				9ED6066F126D30DC004782CA /* bspatch.c in Sources */,

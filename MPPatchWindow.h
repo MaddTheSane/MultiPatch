@@ -17,11 +17,11 @@ typedef NS_ENUM(NSInteger, MPPatchFormat) {
     IBOutlet MPFileTextField *txtPatchPath;
     IBOutlet MPFileTextField *txtRomPath;
 	IBOutlet NSTextField *txtOutputPath;
-	IBOutlet id lblPatchFormat;
+	IBOutlet NSTextField *lblPatchFormat;
     IBOutlet NSWindow *wndCreator;
-	IBOutlet id pnlPatching;
-	IBOutlet id	barProgress;
-	IBOutlet id btnApply;
+	IBOutlet NSPanel *pnlPatching;
+	IBOutlet NSProgressIndicator	*barProgress;
+	IBOutlet NSButton *btnApply;
 	IBOutlet NSTextField *lblStatus;
 	MPPatchFormat currentFormat;
 	NSString* romFormat;
@@ -32,7 +32,7 @@ typedef NS_ENUM(NSInteger, MPPatchFormat) {
 - (IBAction)btnSelectOriginal:(id)sender;
 - (IBAction)btnSelectOutput:(id)sender;
 + (MPPatchFormat)detectPatchFormat:(NSString*)patchPath;
-- (NSString*)ApplyPatch:(NSString*)patchPath :(NSString*)sourceFile :(NSString*)destFile;
+- (BOOL)applyPatchAtURL:(NSURL*)patchPath source:(NSURL*)sourceFile destination:(NSURL*)destFile error:(NSError**)outError;
 - (IBAction)btnCreatePatch:(id)sender;
 + (mbFlipWindow*)flipper;
 

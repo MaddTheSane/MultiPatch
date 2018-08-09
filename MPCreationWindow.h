@@ -25,5 +25,5 @@
 - (IBAction)btnPickOutput:(id)sender;
 - (IBAction)btnCreatePatch:(id)sender;
 - (IBAction)btnApplyMode:(id)sender;
-- (NSString*)CreatePatch:(NSString*)origFile :(NSString*)modFile :(NSString*)createFile;
+- (BOOL)createPatchUsingSourceURL:(NSURL*)sourceFile modifiedFileURL:(NSURL*)destFile toURL:(NSURL*)patchPath error:(NSError**)outError;
 @end

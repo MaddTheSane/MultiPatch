@@ -4,12 +4,12 @@
 //
 
 #import "MPCreationWindow.h"
-#include "libups.hpp"
 #include "XDeltaAdapter.h"
 #include "IPSAdapter.h"
 #include "PPFAdapter.h"
 #include "BSdiffAdapter.h"
 #include "BPSAdapter.h"
+#include "MPUPSAdapter.h"
 
 @implementation MPCreationWindow
 
@@ -20,12 +20,13 @@
 
 -(void)makeKeyAndOrderFront:(id)sender{
     [super makeKeyAndOrderFront:sender];
+    __weak MPCreationWindow *weakSelf = self;
     txtOrigFile.acceptFileDrop = ^BOOL(NSURL * target) {
-        [self setOriginalFile:target];
+        [weakSelf setOriginalFile:target];
         return YES;
     };
     txtModFile.acceptFileDrop = ^BOOL(NSURL * target) {
-        [self setModifiedFile:target];
+        [weakSelf setModifiedFile:target];
         return YES;
     };
 }
@@ -45,7 +46,7 @@
     NSOpenPanel *fbox = [NSOpenPanel openPanel];
     [fbox beginSheetModalForWindow:self completionHandler:^(NSInteger result) {
         if(result == NSModalResponseOK){
-            [self setOriginalFile:[[fbox URLs] objectAtIndex:0]];
+            [self setOriginalFile:fbox.URL];
         }
     }];
 }
@@ -147,29 +148,43 @@
 	if([fileManager fileExistsAtPath:origPath] && [fileManager fileExistsAtPath:modPath]){
 		if([origPath length] > 0 && [modPath length] > 0 && [patchPath length] > 0){
 			[lblStatus setStringValue:@"Now creating patch..."];
-			[NSApp beginSheet:pnlPatching modalForWindow:self modalDelegate:nil didEndSelector:nil contextInfo:nil];
+			[self beginSheet:pnlPatching completionHandler:^(NSModalResponse returnCode) {
+				//Do nothing
+			}];
             //Make a sheet
             [barProgress setUsesThreadedAnimation:YES]; //Make sure it animates.
 			[barProgress startAnimation:self];
-			NSString* errMsg = [self CreatePatch:origPath :modPath :patchPath];
+			NSError *err;
+			NSURL *origURL = [NSURL fileURLWithPath:origPath];
+			NSURL *modURL = [NSURL fileURLWithPath:modPath];
+			NSURL *patchURL = [NSURL fileURLWithPath:patchPath];
+			BOOL success = [self createPatchUsingSourceURL:origURL modifiedFileURL:modURL toURL:patchURL error:&err];
 			[barProgress stopAnimation:self];
-			[NSApp endSheet:pnlPatching]; //Tell the sheet we're done.
+			[self endSheet:pnlPatching]; //Tell the sheet we're done.
 			[pnlPatching orderOut:self]; //Lets hide the sheet.
 			
-			if(errMsg == nil){
-				NSRunAlertPanel(@"Finished!",@"The patch was created sucessfully!",@"Okay",nil,nil);
+			if(success){
+				NSAlert *alert = [[NSAlert alloc] init];
+				alert.messageText = @"Finished!";
+				alert.informativeText = @"The patch was created sucessfully!";
+				[alert runModal];
 			}
 			else{
-				NSRunAlertPanel(@"Patch creation failed.", errMsg, @"Okay", nil, nil);
-				errMsg = nil;
+				[NSApp presentError:err];
 			}
 		}
 		else{
-			NSRunAlertPanel(@"Not ready yet",@"All of the files above must be chosen before patching is possible.",@"Okay",nil,nil);
+			NSAlert *alert = [[NSAlert alloc] init];
+			alert.messageText = @"Not ready yet";
+			alert.informativeText = @"All of the files above must be chosen before patching is possible.";
+			[alert runModal];
 		}
 	}
 	else{
-		NSRunAlertPanel(@"Input file(s) not found",@"The input files must be selected and should exist.",@"Okay",nil,nil);	
+		NSAlert *alert = [[NSAlert alloc] init];
+		alert.messageText = @"Input file(s) not found";
+		alert.informativeText = @"The input files must be selected and should exist.";
+		[alert runModal];
 	}
 }
 
@@ -179,33 +194,45 @@
     [flipper flip:self to:wndApplyPatch];
 }
 
-- (NSString*)CreatePatch:(NSString*)origFile :(NSString*)modFile :(NSString*)createFile{
-    NSString* retval = nil;
-	if(currentFormat == MPPatchFormatUPS){
-		UPS ups; //UPS Patcher
-		bool result = ups.create([origFile cStringUsingEncoding:[NSString defaultCStringEncoding]], [modFile cStringUsingEncoding:[NSString defaultCStringEncoding]], [createFile cStringUsingEncoding:[NSString defaultCStringEncoding]]);
-		if(result == false){
-			retval = [NSString stringWithCString:ups.error encoding:NSASCIIStringEncoding];
-		}
+- (BOOL)createPatchUsingSourceURL:(NSURL*)sourceFile modifiedFileURL:(NSURL*)destFile toURL:(NSURL*)patchPath error:(NSError**)outError
+{
+	BOOL retval = NO;
+	switch (currentFormat) {
+		case MPPatchFormatUPS:
+			retval = [MPUPSAdapter createPatchUsingSourceURL:sourceFile modifiedFileURL:destFile destination:patchPath error:outError];
+			break;
+			
+		case MPPatchFormatIPS:
+			retval = [IPSAdapter createPatchUsingSourceURL:sourceFile modifiedFileURL:destFile destination:patchPath error:outError];
+			break;
+			
+		case MPPatchFormatXDelta:
+			retval = [XDeltaAdapter createPatchUsingSourceURL:sourceFile modifiedFileURL:destFile destination:patchPath error:outError];
+			break;
+			
+		case MPPatchFormatPPF:
+			retval = [PPFAdapter createPatchUsingSourceURL:sourceFile modifiedFileURL:destFile destination:patchPath error:outError];
+			break;
+			
+		case MPPatchFormatBSDiff:
+			retval = [BSdiffAdapter createPatchUsingSourceURL:sourceFile modifiedFileURL:destFile destination:patchPath error:outError];
+			break;
+			
+		case MPPatchFormatBPS:
+			retval = [BPSAdapter createLinearPatchUsingSourceURL:sourceFile modifiedFileURL:destFile destination:patchPath error:outError];
+			break;
+			
+		case MPPatchFormatBPSDelta:
+			retval = [BPSAdapter createDeltaPatchUsingSourceURL:sourceFile modifiedFileURL:destFile destination:patchPath error:outError];
+			break;
+			
+		default:
+		case MPPatchFormatUnknown:
+			if (outError) {
+				*outError = [NSError errorWithDomain:NSCocoaErrorDomain code:NSFeatureUnsupportedError userInfo:nil];
+			}
+			break;
 	}
-	else if(currentFormat == MPPatchFormatIPS){
-		retval = [IPSAdapter createPatch:origFile withMod:modFile andCreate:createFile];
-	}
-	else if(currentFormat == MPPatchFormatXDelta){
-        retval = [XDeltaAdapter createPatch:origFile withMod:modFile andCreate:createFile];
-	}
-	else if(currentFormat == MPPatchFormatPPF){
-		retval = [PPFAdapter createPatch:origFile withMod:modFile andCreate:createFile];
-	}
-    else if(currentFormat == MPPatchFormatBSDiff){
-        retval = [BSdiffAdapter createPatch:origFile withMod:modFile andCreate:createFile];
-    }
-    else if(currentFormat == MPPatchFormatBPS){
-        retval = [BPSAdapter createPatchLinear:origFile withMod:modFile andCreate:createFile];
-    }
-    else if(currentFormat == MPPatchFormatBPSDelta){
-        retval = [BPSAdapter createPatchDelta:origFile withMod:modFile andCreate:createFile];
-    }
 	return retval;
 }
 @end
