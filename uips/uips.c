@@ -111,7 +111,7 @@ static void writevalue(long value, FILE *f, unsigned nbytes) {
   unsigned i = nbytes << 3;
   while(nbytes--) {
     i -= 8;
-    fputc(value >> i, f);
+    fputc((value >> i) & 0x7FFFFFFF, f);
   }
 }
 
