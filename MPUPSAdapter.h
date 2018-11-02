@@ -8,6 +8,11 @@
 #import <Foundation/Foundation.h>
 #import "MPPatchAdapter.h"
 
+extern NSErrorDomain const MPUPSErrorDomain;
+typedef NS_ERROR_ENUM(MPUPSErrorDomain, MPUPSError) {
+	MPUPSErrorGeneric = 1
+};
+
 @interface MPUPSAdapter : NSObject <MPPatchAdapter>
 
 @end

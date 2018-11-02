@@ -8,6 +8,30 @@
 NSErrorDomain const BSdiffAdaptorErrorDomain = @"com.sappharad.MultiPatch.bsdiff.error";
 
 @implementation BSdiffAdapter
++(void)load
+{
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		[NSError setUserInfoValueProviderForDomain:BSdiffAdaptorErrorDomain provider:^id _Nullable(NSError * _Nonnull err, NSErrorUserInfoKey  _Nonnull userInfoKey) {
+			if ([userInfoKey isEqualToString:NSLocalizedDescriptionKey]) {
+				switch (err.code) {
+					case BSdiffAdaptorErrorCorruptPatch:
+						return @"Failed to apply BSdiff patch. Your patch file appears to be corrupt.";
+						break;
+						
+					case BSdiffAdaptorErrorOutOfMemory:
+						return @"Not enough memory to create BSDiff patch.\nInput files are probably too big.";
+						break;
+						
+					default:
+						break;
+				}
+			}
+			
+			return nil;
+		}];
+	});
+}
 
 extern int bspatch_perform(char* oldfile, char* newfile, char* patchfile);
 extern int bsdiff_perform(char* oldfile, char* newfile, char* patchfile);

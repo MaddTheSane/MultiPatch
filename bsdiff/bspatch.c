@@ -135,7 +135,7 @@ int bspatch_perform(char* oldfile, char* newfile, char* patchfile)
 		(lseek(fd,0,SEEK_SET)!=0) ||
 		(read(fd,old,oldsize)!=oldsize) ||
 		(close(fd)==-1)) return 1; //err(1,"%s",oldfile);
-	if((new=malloc(newsize+1))==NULL) err(1,NULL);
+	if((new=malloc(newsize+1))==NULL) return 5;//err(1,NULL);
 
 	oldpos=0;newpos=0;
 	while(newpos<newsize) {

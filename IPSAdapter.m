@@ -22,10 +22,9 @@ NSErrorDomain const IPSAdapterErrorDomain = @"com.sappharad.MultiPatch.ips.error
 	int err = apply_patch([patch fileSystemRepresentation], [output fileSystemRepresentation]);
 	if(err == 1){
 		if (error) {
-			*error = [NSError errorWithDomain:IPSAdapterErrorDomain code:1 userInfo:nil];
+			*error = [NSError errorWithDomain:IPSAdapterErrorDomain code:IPSAdapterErrorApplyingPatch userInfo:@{NSLocalizedDescriptionKey:@"Failed to apply IPS patch!"}];
 		}
 		return NO;
-		//return @"Failed to apply IPS patch!";
 	}
 	
 	return YES;
@@ -37,11 +36,10 @@ NSErrorDomain const IPSAdapterErrorDomain = @"com.sappharad.MultiPatch.ips.error
 	int err = create_patch([output fileSystemRepresentation], 1, (const char**)listOfOne, [modify fileSystemRepresentation]);
 	if(err == 1){
 		if (error) {
-			*error = [NSError errorWithDomain:IPSAdapterErrorDomain code:2 userInfo:nil];
+			*error = [NSError errorWithDomain:IPSAdapterErrorDomain code:IPSAdapterErrorCreatingPatch userInfo:@{NSLocalizedDescriptionKey:@"Failed to create IPS patch!"}];
 		}
 
 		return NO;
-		//return @"Failed to create IPS patch!";
 	}
 	
 	return YES;
