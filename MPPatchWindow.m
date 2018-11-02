@@ -127,7 +127,7 @@ static mbFlipWindow* _flipper;
 
 - (IBAction)btnSelectPatch:(id)sender{
 	NSOpenPanel *fbox = [NSOpenPanel openPanel];
-	fbox.allowedFileTypes = @[@"ups", @"ips", @"ppf", @"dat", @"delta", @"bdf", @"bsdiff", @"bps"];
+	fbox.allowedFileTypes = @[@"ups", @"ips", @"ppf", @"dat", @"xdelta", @"delta", @"bdf", @"bsdiff", @"bps"];
     [fbox beginSheetModalForWindow:self completionHandler:^(NSInteger result) {
         if(result == NSModalResponseOK){
             [self setPatchFile:[[fbox URLs] objectAtIndex:0]];
