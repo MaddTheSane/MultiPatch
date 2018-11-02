@@ -98,7 +98,7 @@ static mbFlipWindow* _flipper;
 -(void)setPatchFile:(NSURL*)patch{
     NSString* selfile = [patch path];
     [txtPatchPath setStringValue:selfile];
-    currentFormat = [MPPatchWindow detectPatchFormat:selfile];
+    currentFormat = [MPPatchWindow detectPatchFormatFromURL:patch];
     [btnApply setEnabled:currentFormat!=MPPatchFormatUnknown];
     switch (currentFormat) {
         case MPPatchFormatUPS:
@@ -164,6 +164,10 @@ static mbFlipWindow* _flipper;
 }
 
 + (MPPatchFormat)detectPatchFormat:(NSString*)patchPath{
+	return [self detectPatchFormatFromURL:[NSURL fileURLWithPath:patchPath]];
+}
+
++ (MPPatchFormat)detectPatchFormatFromURL:(NSURL*)patchPath{
 	//I'm just going to look at the file extensions for now.
 	//In the future, I might wish to actually look at the contents of the file.
     NSString* lowerPath = [patchPath pathExtension].lowercaseString;
@@ -176,7 +180,7 @@ static mbFlipWindow* _flipper;
 	else if([lowerPath hasSuffix:@"ppf"]){
 		return MPPatchFormatPPF;
 	}
-	else if([lowerPath hasSuffix:@"dat"] || [patchPath.lowercaseString hasSuffix:@"delta"]){
+	else if([lowerPath hasSuffix:@"dat"] || [patchPath.lastPathComponent.lowercaseString hasSuffix:@"delta"]){
 		return MPPatchFormatXDelta;
 	}
     else if([lowerPath hasSuffix:@"bdf"] || [lowerPath hasSuffix:@"bsdiff"]){

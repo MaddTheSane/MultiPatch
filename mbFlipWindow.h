@@ -6,7 +6,7 @@
 @interface mbFlipWindow : NSObject
 {
     BOOL flipRight;
-    double duration;
+    NSTimeInterval duration;
     NSWindow *mAnimationWindow;// windows, created for animation
     NSWindow *mTargetWindow;
 }
@@ -14,6 +14,6 @@
 - (void) flip:(NSWindow *)activeWindow to:(NSWindow *)targetWindow;
 
 @property BOOL flipRight; // YES -rotation right
-@property double duration; // time for animation, default value 2.0
+@property NSTimeInterval duration; // time for animation, default value 2.0
 
 @end

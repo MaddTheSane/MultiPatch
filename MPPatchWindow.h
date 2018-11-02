@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, MPPatchFormat) {
 - (IBAction)btnSelectOriginal:(id)sender;
 - (IBAction)btnSelectOutput:(id)sender;
 + (MPPatchFormat)detectPatchFormat:(NSString*)patchPath;
++ (MPPatchFormat)detectPatchFormatFromURL:(NSURL*)patchPath;
 - (BOOL)applyPatchAtURL:(NSURL*)patchPath source:(NSURL*)sourceFile destination:(NSURL*)destFile error:(NSError**)outError;
 - (IBAction)btnCreatePatch:(id)sender;
 + (mbFlipWindow*)flipper;

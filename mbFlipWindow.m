@@ -7,10 +7,10 @@
 @interface mbFlipWindow () <CAAnimationDelegate> //hiden methods
 - (NSWindow *) windowForAnimation:(NSRect)aFrame;
 - (CALayer *) layerFromView :(NSView*)view;
-NSRect RectToScreen(NSRect aRect, NSView *aView);
-NSRect RectFromScreen(NSRect aRect, NSView *aView);
-NSRect RectFromViewToView(NSRect aRect, NSView *fromView, NSView *toView);
-- (CAAnimation *) animationWithDuration:(CGFloat)time flip:(BOOL)bFlip right:(BOOL)rightFlip;
+static NSRect RectToScreen(NSRect aRect, NSView *aView);
+static NSRect RectFromScreen(NSRect aRect, NSView *aView);
+static NSRect RectFromViewToView(NSRect aRect, NSView *fromView, NSView *toView);
+- (CAAnimation *) animationWithDuration:(NSTimeInterval)time flip:(BOOL)bFlip right:(BOOL)rightFlip;
 @end
 
 @interface OutsideWindow : NSWindow
@@ -94,7 +94,7 @@ NSRect RectFromViewToView(NSRect aRect, NSView *fromView, NSView *toView) {
 }
 
 // create Core Animation are receding and to expand the window
-- (CAAnimation *) animationWithDuration:(CGFloat)time flip:(BOOL)bFlip right:(BOOL)rightFlip{
+- (CAAnimation *) animationWithDuration:(NSTimeInterval)time flip:(BOOL)bFlip right:(BOOL)rightFlip{
     
     CABasicAnimation *flipAnimation = [CABasicAnimation animationWithKeyPath:@"transform.rotation.y"];
     
@@ -112,7 +112,7 @@ NSRect RectFromViewToView(NSRect aRect, NSView *fromView, NSView *toView) {
     flipAnimation.toValue = [NSNumber numberWithDouble:endValue];
     
     CABasicAnimation *scaleAnimation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-    scaleAnimation.toValue = [NSNumber numberWithFloat:1.3f];
+    scaleAnimation.toValue = @1.3f;
     scaleAnimation.duration = time * 0.5;
     scaleAnimation.autoreverses = YES;
     
