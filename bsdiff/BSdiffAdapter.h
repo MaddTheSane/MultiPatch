@@ -5,6 +5,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MPPatchAdapter.h"
+#import "MPPatchResult.h"
 
 extern NSErrorDomain const BSdiffAdaptorErrorDomain;
 typedef NS_ERROR_ENUM(BSdiffAdaptorErrorDomain, BSdiffAdaptorError) {
@@ -14,5 +15,6 @@ typedef NS_ERROR_ENUM(BSdiffAdaptorErrorDomain, BSdiffAdaptorError) {
 };
 
 @interface BSdiffAdapter : NSObject <MPPatchAdapter>
-
+    +(MPPatchResult*)ApplyPatch:(NSString*)patch toFile:(NSString*)input andCreate:(NSString*)output;
+    +(MPPatchResult*)CreatePatch:(NSString*)orig withMod:(NSString*)modify andCreate:(NSString*)output;
 @end

@@ -4,12 +4,13 @@
 //
 
 #import "MPCreationWindow.h"
-#include "XDeltaAdapter.h"
-#include "IPSAdapter.h"
-#include "PPFAdapter.h"
-#include "BSdiffAdapter.h"
-#include "BPSAdapter.h"
-#include "MPUPSAdapter.h"
+#import "XDeltaAdapter.h"
+#import "IPSAdapter.h"
+#import "PPFAdapter.h"
+#import "BSdiffAdapter.h"
+#import "BPSAdapter.h"
+#import "UPSAdapter.h"
+#import "MPPatchResult.h"
 
 @implementation MPCreationWindow
 
@@ -69,13 +70,15 @@
     NSSavePanel *fbox = [NSSavePanel savePanel];
 	[fbox setExtensionHidden:NO];
     [ddFormats removeAllItems];
-    [ddFormats addItemWithTitle:@"UPS Patch (*.ups)"];
+    //Put Delta BPS on top because it's the preferred format.
+    [ddFormats addItemWithTitle:@"Delta BPS Patch (*.bps)"];
+    [ddFormats addItemWithTitle:@"Linear BPS Patch (*.bps)"];
+    //[ddFormats addItemWithTitle:@"UPS Patch (*.ups)"];
+    //FLIPS does not create UPS. It's deprecated anyway, so use BPS instead
     [ddFormats addItemWithTitle:@"IPS Patch (*.ips)"];
-    //[ddFormats addItemWithTitle:@"PPF Patch (*.ppf)"]; //No PPF creation in LibPPF. :-(
+    [ddFormats addItemWithTitle:@"PPF Patch (*.ppf)"];
     [ddFormats addItemWithTitle:@"XDelta Patch (*.delta)"];
     [ddFormats addItemWithTitle:@"BSDiff Patch (*.bdf)"];
-    [ddFormats addItemWithTitle:@"Linear BPS Patch (*.bps)"];
-    [ddFormats addItemWithTitle:@"Delta BPS Patch (*.bps)"];
     [fbox setAccessoryView:vwFormatPicker];
     [fbox beginSheetModalForWindow:self completionHandler:^(NSInteger result) {
         [self selOutputPanelEnd:fbox returnCode:result];
@@ -99,6 +102,9 @@
         else if([[ddFormats titleOfSelectedItem] hasPrefix:@"IPS"] && ![selfile hasSuffix:@".ips"]){
             selfile = [selfile stringByAppendingPathExtension:@"ips"];
         }
+        else if([[ddFormats titleOfSelectedItem] hasPrefix:@"PPF"] && ![selfile hasSuffix:@".ppf"]){
+            selfile = [selfile stringByAppendingString:@".ppf"];
+        }
         else if([[ddFormats titleOfSelectedItem] hasPrefix:@"XDelta"] && ![selfile hasSuffix:@".delta"]){
             selfile = [selfile stringByAppendingPathExtension:@"delta"];
         }
@@ -107,18 +113,18 @@
         }
         [txtPatchFile setStringValue:selfile];
         currentFormat = [MPPatchWindow detectPatchFormat:selfile];
-        if(currentFormat == MPPatchFormatUPS){
-            [lblPatchFormat setStringValue:@"UPS Patch"];
-        }
-        else if(currentFormat == MPPatchFormatIPS){
+        if(currentFormat == MPPatchFormatIPS){
             [lblPatchFormat setStringValue:@"IPS Patch"];
         }
+        /*else if(currentFormat == MPPatchFormatUPS){
+            [lblPatchFormat setStringValue:@"UPS Patch"];
+        }*/
         else if(currentFormat == MPPatchFormatXDelta){
             [lblPatchFormat setStringValue:@"XDelta Patch"];
         }
-        /*else if(currentFormat == PPFPAT){
+        else if(currentFormat == MPPatchFormatPPF){
             [lblPatchFormat setStringValue:@"PPF Patch"];
-        }*/
+        }
         else if(currentFormat == MPPatchFormatBSDiff){
             [lblPatchFormat setStringValue:@"BSDiff Patch"];
         }
@@ -169,6 +175,11 @@
 				alert.informativeText = @"The patch was created sucessfully!";
 				[alert runModal];
 			}
+//            else if(errMsg.IsWarning){
+//                NSRunAlertPanel(@"Patch creation finished with warning.", errMsg.Message, @"Okay", nil, nil);
+//                [errMsg release];
+//                errMsg = nil;
+//            }
 			else{
 				[NSApp presentError:err];
 			}
@@ -224,6 +235,10 @@
 			
 		case MPPatchFormatBPSDelta:
 			retval = [BPSAdapter createDeltaPatchUsingSourceURL:sourceFile modifiedFileURL:destFile destination:patchPath error:outError];
+			break;
+			
+		case MPPatchFormatNinjaRUP:
+			
 			break;
 			
 		default:

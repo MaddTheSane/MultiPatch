@@ -10,7 +10,8 @@ typedef NS_ENUM(NSInteger, MPPatchFormat) {
 	MPPatchFormatPPF,
 	MPPatchFormatBSDiff,
 	MPPatchFormatBPS,
-	MPPatchFormatBPSDelta
+	MPPatchFormatBPSDelta,
+	MPPatchFormatNinjaRUP
 };
 
 @interface MPPatchWindow : NSWindow{
